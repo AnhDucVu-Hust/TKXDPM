@@ -49,7 +49,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <Pane prefHeight="608.0" prefWidth="796.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.btl_tkxdpm.home.HomeController">
    <children>
     <MenuBar prefHeight="28.0" prefWidth="797.0">
@@ -96,7 +95,7 @@
             <ButtonBar layoutX="12.0" layoutY="87.0" prefHeight="40.0" prefWidth="534.0">
               <buttons>
                   <Button fx:id="thongKeButton" mnemonicParsing="false" prefHeight="43.0" text="Thống kê" />
-                <Button mnemonicParsing="false" prefHeight="44.0" text="Xuất báo cáo" fx:id="xuatBaoCaoButton" />
+                <Button mnemonicParsing="false" onMouseClicked="#clickXuatBaoCao" prefHeight="44.0" text="Xuất báo cáo" fx:id="xuatBaoCaoButton" />
                   <Button fx:id="themNhanVienButton" mnemonicParsing="false" prefHeight="57.0" prefWidth="202.0" text="Thêm nhân viên" />
               </buttons>
             </ButtonBar>
@@ -137,7 +136,7 @@
             <ChoiceBox fx:id="thangSearch" layoutX="464.0" layoutY="128.0" prefHeight="26.0" prefWidth="51.0" />
             <Text layoutX="624.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Đơn vị" />
             <ChoiceBox fx:id="donViSearch" layoutX="666.0" layoutY="126.0" prefHeight="26.0" prefWidth="121.0" />
-            <ChoiceBox fx:id="thangSearch1" layoutX="564.0" layoutY="127.0" prefHeight="26.0" prefWidth="51.0" />
+            <ChoiceBox fx:id="namSearch" layoutX="564.0" layoutY="127.0" prefHeight="26.0" prefWidth="51.0" />
             <Text layoutX="534.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Năm" />
       </children>
     </AnchorPane>

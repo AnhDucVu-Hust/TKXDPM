@@ -12,14 +12,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/btl_tkxdpm/manHinhChinh.fxml"));
-        Parent root = loader.load();
 
-        // Get the controller from the loader
-        HomeController controller = loader.getController();
-
+        SwitchScreener.setPrimaryStage(stage);
+        SwitchScreener.switchScreen("/com/btl_tkxdpm/manHinhChinh.fxml");
         stage.setTitle("FXML Example");
-        stage.setScene(new Scene(root));
         stage.show();
     }
     public static void main(String[] args) {

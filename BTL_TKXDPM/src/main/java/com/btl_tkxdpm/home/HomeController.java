@@ -2,18 +2,24 @@ package com.btl_tkxdpm.home;
 
 import com.btl_tkxdpm.AttendanceDB.IAttendanceDB;
 import com.btl_tkxdpm.AttendanceDB.OldAttendanceDB;
+import com.btl_tkxdpm.SwitchScreener;
 import com.btl_tkxdpm.entity.NhanVien;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
+
+import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.text.SimpleDateFormat;
@@ -94,8 +100,11 @@ public class HomeController implements Initializable {
         ));
         thangSearch.setValue("Tất cả");
         namSearch.setValue("Tất cả");
-
-
-
     }
+    @FXML
+    void clickXuatBaoCao(MouseEvent event) {
+        SwitchScreener.switchScreen("/com/btl_tkxdpm/xuatBaoCao.fxml");
+        }
+
+
 }
