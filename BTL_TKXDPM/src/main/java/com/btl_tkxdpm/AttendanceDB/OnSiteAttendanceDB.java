@@ -8,12 +8,12 @@ import javafx.collections.ObservableList;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class OldAttendanceDB implements  IAttendanceDB{
+public class OnSiteAttendanceDB implements  IAttendanceDB{
     private ObservableList<NhanVienAttendance> listAttendance = FXCollections.observableArrayList();
     public void themNhanVien(NhanVienAttendance nhanVienAttendance) {
         listAttendance.add(nhanVienAttendance);
     }
-    public OldAttendanceDB(){
+    public OnSiteAttendanceDB(){
         themNhanVien(new NhanVienAttendance(
                 new NhanVien("Vũ Anh Đức","00000","Trưởng đơn vị","Phòng Sản phẩm"),
                 LocalDate.parse("2023-11-02"),

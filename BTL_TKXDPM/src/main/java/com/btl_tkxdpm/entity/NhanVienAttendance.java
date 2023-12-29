@@ -10,29 +10,21 @@ public class NhanVienAttendance {
     private NhanVien nhanVien;
     private final LocalDate day;
     private LocalTime gioVao;
-    private LocalTime gioRa;
+    private String loaiChamCong;
 
-    public NhanVienAttendance(NhanVien nhanVien, LocalDate day, LocalTime gioVao, LocalTime gioRa) {
+    public NhanVienAttendance(NhanVien nhanVien, LocalDate day, LocalTime gioVao, String loaiChamCong) {
         this.nhanVien = nhanVien;
         this.day = day;
         this.gioVao = gioVao;
-        this.gioRa = gioRa;
-    }
-
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
-    }
-
-    public void setGioVao(LocalTime gioVao) {
-        this.gioVao = gioVao;
-    }
-
-    public void setGioRa(LocalTime gioRa) {
-        this.gioRa = gioRa;
+        this.loaiChamCong = loaiChamCong;
     }
 
     public NhanVien getNhanVien() {
         return nhanVien;
+    }
+
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
     }
 
     public LocalDate getDay() {
@@ -43,7 +35,15 @@ public class NhanVienAttendance {
         return gioVao;
     }
 
-    public LocalTime getGioRa() {
-        return gioRa;
+    public void setGioVao(LocalTime gioVao) {
+        this.gioVao = gioVao;
+    }
+
+    public String getLoaiChamCong() {
+        return loaiChamCong;
+    }
+
+    public void setLoaiChamCong(String loaiChamCong) {
+        this.loaiChamCong = loaiChamCong;
     }
 }

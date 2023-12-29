@@ -1,6 +1,6 @@
 package com.btl_tkxdpm.export;
 import com.btl_tkxdpm.AttendanceDB.IAttendanceDB;
-import com.btl_tkxdpm.AttendanceDB.OldAttendanceDB;
+import com.btl_tkxdpm.AttendanceDB.OnSiteAttendanceDB;
 import com.btl_tkxdpm.SwitchScreener;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,7 +20,8 @@ public class ExportController implements Initializable {
     private ChoiceBox<?> donViSearch;
     @FXML
     private ChoiceBox namSearch;
-
+    @FXML
+    private ChoiceBox loaiNhanSu;
     @FXML
     private TableColumn<NhanVienAttendance, String> tableChucDanh;
 
@@ -53,7 +54,7 @@ public class ExportController implements Initializable {
     void clickXacNhan(MouseEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Định dạng báo cáo");
-        alert.setHeaderText("Choose an option:");
+        alert.setHeaderText("Bạn mốn xuất báo cáo dưới định dạng nào:");
 
         // Create two buttons
         ButtonType buttonTypeExcel=new ButtonType("Excel");
@@ -80,14 +81,14 @@ public class ExportController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        attendanceDB = new OldAttendanceDB();
+        attendanceDB = new OnSiteAttendanceDB();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         tableView.setItems(attendanceDB.getListAttendance());
         tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getHoTen()));
         tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
         tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getMaNhanVien()));
-        tableGioRa.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getGioRa().format(timeFormatter)));
+        tableGioRa.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getLoaiChamCong()));
         tableGioVao.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getGioVao().format(timeFormatter)));
         tableNgay.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDay().format(dateFormatter)));
         thangSearch.setItems(FXCollections.observableArrayList(
@@ -98,5 +99,9 @@ public class ExportController implements Initializable {
         ));
         thangSearch.setValue("Tất cả");
         namSearch.setValue("Tất cả");
+        loaiNhanSu.setItems(FXCollections.observableArrayList(
+                "Nhân viên văn phòng", "Công nhân"
+        ));
+        loaiNhanSu.setValue("Nhân viên văn phòng");
     }
 }

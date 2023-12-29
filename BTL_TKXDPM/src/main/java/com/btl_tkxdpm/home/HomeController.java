@@ -1,29 +1,18 @@
 package com.btl_tkxdpm.home;
 
 import com.btl_tkxdpm.AttendanceDB.IAttendanceDB;
-import com.btl_tkxdpm.AttendanceDB.OldAttendanceDB;
+import com.btl_tkxdpm.AttendanceDB.OnSiteAttendanceDB;
 import com.btl_tkxdpm.SwitchScreener;
-import com.btl_tkxdpm.entity.NhanVien;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
-import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
@@ -82,14 +71,14 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        attendanceDB = new OldAttendanceDB();
+        attendanceDB = new OnSiteAttendanceDB();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         tableView.setItems(attendanceDB.getListAttendance());
         tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getHoTen()));
         tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
         tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getMaNhanVien()));
-        tableGioRa.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getGioRa().format(timeFormatter)));
+        tableGioRa.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getLoaiChamCong()));
         tableGioVao.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getGioVao().format(timeFormatter)));
         tableNgay.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDay().format(dateFormatter)));
         thangSearch.setItems(FXCollections.observableArrayList(
