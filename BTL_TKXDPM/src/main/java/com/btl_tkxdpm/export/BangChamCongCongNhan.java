@@ -16,19 +16,12 @@ import java.util.stream.Collectors;
 public class BangChamCongCongNhan {
     public static ObservableList<CongNhanThongKe> getBangThongKe(int month,int year){
         ObservableList<NhanVienAttendance> bangChamCong = Services.queryChamCongCongNhan(month,year);
-        Map<String,Float> soGioDiMuonVeSom = new ;
-        Map<String, Integer> soBuoiDiLam = bangChamCong.stream()
-                .collect(Collectors.groupingBy(nhanVienAttendance -> nhanVienAttendance.getNhanVien().getMaNhanVien(), Collectors.mapping(NhanVienAttendance::getDay, Collectors.collectingAndThen(Collectors.toSet(), Set::size))));
-        for (NhanVienAttendance nhanVienAttendance : bangChamCong){
-            if (nhanVienAttendance.getLoaiChamCong().equals("CHECKIN")){
-                float soGioDiMuon = Services.SubtractLocalTime(nhanVienAttendance.getGioVao(), LocalTime.of(8,0,0));
-                
-            }
+        return null;
         }
 
     }
 
 
 
-    }
+
 

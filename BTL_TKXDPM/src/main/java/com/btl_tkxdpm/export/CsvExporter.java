@@ -36,7 +36,7 @@ public class CsvExporter {
                         nhanVienAttendance.getNhanVien().getHoTen(),
                         nhanVienAttendance.getNhanVien().getMaNhanVien(),
                         nhanVienAttendance.getDay().toString(),
-                        nhanVienAttendance.getGioRa().toString(),
+                        nhanVienAttendance.getLoaiChamCong().toString(),
                         nhanVienAttendance.getGioVao().toString(),
                         nhanVienAttendance.getNhanVien().getChucDanh()));
                 writer.newLine();

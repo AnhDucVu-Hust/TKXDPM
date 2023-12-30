@@ -96,7 +96,8 @@
               <buttons>
                   <Button fx:id="thongKeButton" mnemonicParsing="false" prefHeight="43.0" text="Thống kê" />
                 <Button mnemonicParsing="false" onMouseClicked="#clickXuatBaoCao" prefHeight="44.0" text="Xuất báo cáo" fx:id="xuatBaoCaoButton" />
-                  <Button fx:id="themNhanVienButton" mnemonicParsing="false" prefHeight="57.0" prefWidth="202.0" text="Thêm nhân viên" />
+                  <Button fx:id="themNhanVienButton" mnemonicParsing="false" onMouseClicked="#clickThemChamCong" prefHeight="57.0" prefWidth="202.0" text="Thêm chấm công" />
+                  <Button fx:id="themNhanVienButton1" mnemonicParsing="false" onMouseClicked="#clickImportExcel" prefHeight="57.0" prefWidth="202.0" text="Import Excel" />
               </buttons>
             </ButtonBar>
             <ButtonBar layoutX="39.0" layoutY="215.0" prefHeight="40.0" prefWidth="534.0" />
@@ -121,7 +122,7 @@
                 <TableColumn fx:id="tableTen" prefWidth="54.0" text="Tên" />
                 <TableColumn fx:id="tableMaNV" minWidth="5.0" prefWidth="171.0" text="Mã Nhân Viên" />
                   <TableColumn fx:id="tableNgay" prefWidth="115.70391845703125" text="Ngày" />
-                  <TableColumn fx:id="tableGioRa" prefWidth="135.99813842773438" text="Giờ ra" />
+                  <TableColumn fx:id="tableGioRa" prefWidth="135.99813842773438" text="Loại chấm công" />
                   <TableColumn fx:id="tableGioVao" prefWidth="161.0" text="Giờ vào" />
                   <TableColumn fx:id="tableChucDanh" prefWidth="115.70391845703125" text="Chức danh" />
               </columns>

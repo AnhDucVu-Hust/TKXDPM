@@ -25,7 +25,7 @@ public class Services {
                 Date ngay = resultSet.getDate("ngay");
                 Time thoiGian = resultSet.getTime("thoiGian");
                 String loaiChamCong = resultSet.getString("loaiChamCong");
-                NhanVien nhanVien = queryNhanVienBangMa(maNhanVien);
+                NhanVien nhanVien = queryNhanVienBangMa(maNhanVien).get(0);
 
                 listAttendance.add(new NhanVienAttendance(nhanVien,ngay.toLocalDate(),thoiGian.toLocalTime(),loaiChamCong));
 
@@ -52,7 +52,7 @@ public class Services {
                 Date ngay = resultSet.getDate("ngay");
                 Time thoiGian = resultSet.getTime("thoiGian");
                 String loaiChamCong = resultSet.getString("loaiChamCong");
-                NhanVien nhanVien = queryNhanVienBangMa(maNhanVien);
+                NhanVien nhanVien = queryNhanVienBangMa(maNhanVien).get(0);
 
                 listAttendance.add(new NhanVienAttendance(nhanVien,ngay.toLocalDate(),thoiGian.toLocalTime(),loaiChamCong));
 
@@ -63,29 +63,51 @@ public class Services {
         }
         return listAttendance;
     }
-    public static NhanVien queryNhanVienBangMa(String maNhanVien){
+    public static ObservableList<NhanVien> queryNhanVien(String sql) {
         try {
+            ObservableList<NhanVien> listNhanVien = FXCollections.observableArrayList();
             Connection connection = DBConnection.conDB();
-            String sql = "SELECT * FROM NhanVien WHERE maNhanVien=" + maNhanVien;
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             NhanVien nhanVien = null;
             while (resultSet.next()) {
+                String maNhanVien = resultSet.getString("maNhanVien");
                 String hoTen = resultSet.getString("hoTen");
                 String donVi = resultSet.getString("donVi");
                 String chucDanh = resultSet.getString("chucDanh");
 
                 nhanVien = new NhanVien(hoTen,maNhanVien,chucDanh,donVi);
+                listNhanVien.add(nhanVien);
             }
-            return nhanVien;
+            return listNhanVien;
 
         }
         catch (SQLException e){
             e.printStackTrace();
         }
         return null;
+    }
+    public static ObservableList<NhanVien> queryNhanVienBangMa(String maNhanVien){
+        String sql = "SELECT * FROM NhanVien WHERE maNhanVien like %"+maNhanVien+"%";
+        ObservableList<NhanVien> listNhanVien = queryNhanVien(sql);
+        return listNhanVien;
+
 
     }
+    public static ObservableList<NhanVien> queryNhanVienBangDonVi(String donVi) {
+        String sql = "SELECT * FROM NhanVien WHERE donVi like %"+donVi+"%";
+        ObservableList<NhanVien> listNhanVien = queryNhanVien(sql);
+        return listNhanVien;
+    }
+    public static ObservableList<NhanVien> queryNhanVienBangTen(String hoTen) {
+        String sql = "SELECT * FROM NhanVien WHERE hoTen like %"+hoTen+"%";
+        ObservableList<NhanVien> listNhanVien = queryNhanVien(sql);
+        return listNhanVien;
+    }
+    public static void importNhanVienFromExcel(String filepath){
+
+    }
+
      public static ObservableList<NhanVienAttendance> queryChamCongCongNhan(int month,int year){
         ObservableList<NhanVienAttendance> fullChamCong = queryChamCong(month,year);
         Iterator<NhanVienAttendance> iterator = fullChamCong.iterator();
@@ -113,4 +135,21 @@ public class Services {
         float durationInHours = duration.toMinutes()/60.0f;
         return durationInHours;
     }
+    public static void addNhanVien(NhanVien nhanVien){
+        try {
+            String query = "INSERT INTO NhanVien(maNhanVien,ten,donVi,chucDanh) VALUES (?,?,?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,nhanVien.getMaNhanVien());
+            preparedStatement.setString(2,nhanVien.getHoTen());
+            preparedStatement.setString(3,nhanVien.getDonVi());
+            preparedStatement.setString(4,nhanVien.getChucDanh());
+            preparedStatement.execute();
+            System.out.println("Thêm thành công");
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+
 }

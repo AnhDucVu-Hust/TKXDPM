@@ -3,6 +3,7 @@ package com.btl_tkxdpm.home;
 import com.btl_tkxdpm.AttendanceDB.IAttendanceDB;
 import com.btl_tkxdpm.AttendanceDB.OnSiteAttendanceDB;
 import com.btl_tkxdpm.SwitchScreener;
+import com.btl_tkxdpm.add.ImportExcel;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -10,7 +11,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.collections.FXCollections;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -65,16 +69,26 @@ public class HomeController implements Initializable {
     private Button xuatBaoCaoButton;
 
     @FXML
-    private TableView tableView;
+    private TableView<NhanVienAttendance> tableView;
 
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         attendanceDB = new OnSiteAttendanceDB();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         tableView.setItems(attendanceDB.getListAttendance());
+        tableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                NhanVienAttendance selected = tableView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    System.out.println("Double-clicked on: " + selected.getNhanVien().getMaNhanVien() );
+
+                }
+            }
+        });
         tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getHoTen()));
         tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
         tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getMaNhanVien()));
@@ -94,6 +108,25 @@ public class HomeController implements Initializable {
     void clickXuatBaoCao(MouseEvent event) {
         SwitchScreener.switchScreen("/com/btl_tkxdpm/xuatBaoCao.fxml");
         }
+    @FXML
+    void clickThemChamCong(MouseEvent event){SwitchScreener.switchScreen("/com/btl_tkxdpm/danhSachNhanVien.fxml");}
+    @FXML
+    void clickImportExcel(MouseEvent event){
+        FileChooser fileChooser = new FileChooser();
 
+        // Set initial directory (optional)
+        File initialDirectory = new File(System.getProperty("user.home"));
+        fileChooser.setInitialDirectory(initialDirectory);
 
+        // Show open dialog
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
+
+        if (selectedFile != null) {
+            // Handle the selected file
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+            ImportExcel.importExcel(selectedFile.getAbsolutePath());
+        } else {
+            System.out.println("File selection canceled.");
+        }
+    }
 }

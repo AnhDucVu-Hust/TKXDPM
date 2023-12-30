@@ -32,7 +32,7 @@ public class ExcelExporter {
                 row.createCell(0).setCellValue(nhanVienAttendance.getNhanVien().getHoTen());
                 row.createCell(1).setCellValue(nhanVienAttendance.getNhanVien().getMaNhanVien());
                 row.createCell(2).setCellValue(nhanVienAttendance.getDay().toString());
-                row.createCell(3).setCellValue(nhanVienAttendance.getGioRa().toString());
+                row.createCell(3).setCellValue(nhanVienAttendance.getLoaiChamCong().toString());
                 row.createCell(5).setCellValue(nhanVienAttendance.getGioVao().toString());
                 row.createCell(6).setCellValue(nhanVienAttendance.getNhanVien().getChucDanh());
             }

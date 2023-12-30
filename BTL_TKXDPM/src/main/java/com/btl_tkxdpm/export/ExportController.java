@@ -26,10 +26,10 @@ public class ExportController implements Initializable {
     private TableColumn<NhanVienAttendance, String> tableChucDanh;
 
     @FXML
-    private TableColumn<NhanVienAttendance, String> tableGioRa;
+    private TableColumn<NhanVienAttendance, String> tableDiMuonVeSom;
 
     @FXML
-    private TableColumn<NhanVienAttendance, String> tableGioVao;
+    private TableColumn<NhanVienAttendance, String> tableTongSoBuoiLam;
 
     @FXML
     private TableColumn<NhanVienAttendance, String> tableMaNV;
@@ -40,7 +40,9 @@ public class ExportController implements Initializable {
     private TableColumn<NhanVienAttendance, String> tableNgay;
 
     @FXML
-    private TableView tableView;
+    private TableView tableNhanVien;
+    @FXML
+    private TableView tableCongNhan;
 
     @FXML
     private ChoiceBox<String> thangSearch;
@@ -84,13 +86,12 @@ public class ExportController implements Initializable {
         attendanceDB = new OnSiteAttendanceDB();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        tableView.setItems(attendanceDB.getListAttendance());
+        tableCongNhan.setItems(attendanceDB.getListCongNhanAttendance());
+        tableNhanVien.setItems(attendanceDB.getListNhanVienAttendace());
         tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getHoTen()));
-        tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
+        //tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
         tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getMaNhanVien()));
-        tableGioRa.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getLoaiChamCong()));
-        tableGioVao.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getGioVao().format(timeFormatter)));
-        tableNgay.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDay().format(dateFormatter)));
+        //tableNgay.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDay().format(dateFormatter)));
         thangSearch.setItems(FXCollections.observableArrayList(
                 "Tất cả", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
         ));
@@ -102,6 +103,6 @@ public class ExportController implements Initializable {
         loaiNhanSu.setItems(FXCollections.observableArrayList(
                 "Nhân viên văn phòng", "Công nhân"
         ));
-        loaiNhanSu.setValue("Nhân viên văn phòng");
+        loaiNhanSu.setValue("Công nhân");
     }
 }
