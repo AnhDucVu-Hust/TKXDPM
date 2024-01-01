@@ -13,10 +13,9 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        SwitchScreener.setPrimaryStage(stage);
         SwitchScreener.switchScreen("/com/btl_tkxdpm/manHinhChinh.fxml");
-        stage.setTitle("FXML Example");
-        stage.show();
+        SwitchScreener.primaryStage.setTitle("FXML Example");
+        SwitchScreener.primaryStage.show();
     }
     public static void main(String[] args) {
         launch();

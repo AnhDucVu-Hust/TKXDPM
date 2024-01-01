@@ -10,6 +10,7 @@ import java.time.LocalTime;
 
 public class OnSiteAttendanceDB implements  IAttendanceDB{
     private ObservableList<NhanVienAttendance> listAttendance = FXCollections.observableArrayList();
+    private ObservableList<NhanVien> listNhanVien;
     public void themNhanVien(NhanVienAttendance nhanVienAttendance) {
         listAttendance.add(nhanVienAttendance);
     }
@@ -50,28 +51,17 @@ public class OnSiteAttendanceDB implements  IAttendanceDB{
 
     @Override
     public ObservableList<NhanVienAttendance> getListCongNhanAttendance() {
-        ObservableList<NhanVienAttendance> listCongNhanAttendance = FXCollections.observableArrayList();
-        for (NhanVienAttendance attendance : listAttendance){
-            if (attendance.getNhanVien().getChucDanh().equals("Công nhân")){
-                listCongNhanAttendance.add(attendance);
-            }
-        }
-        return listCongNhanAttendance;
+        return listAttendance.filtered(c -> c.getNhanVien().getChucDanh().equals("Công nhân"));
     }
 
     @Override
     public ObservableList<NhanVienAttendance> getListNhanVienAttendace() {
-        ObservableList<NhanVienAttendance> listCongNhanAttendance = FXCollections.observableArrayList();
-        for (NhanVienAttendance attendance : listAttendance){
-            if (attendance.getNhanVien().getChucDanh().equals("Nhân viên văn phòng")){
-                listCongNhanAttendance.add(attendance);
-            }
-        }
-        return listCongNhanAttendance;
+        return listAttendance.filtered(c -> c.getNhanVien().getChucDanh().equals("Nhân viên văn phòng"));
     }
 
     @Override
     public void addAttendance(ObservableList<NhanVienAttendance> listChamCong) {
-
+        listAttendance.addAll(listChamCong);
     }
+
 }

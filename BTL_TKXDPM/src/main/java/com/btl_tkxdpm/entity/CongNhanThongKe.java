@@ -1,5 +1,7 @@
 package com.btl_tkxdpm.entity;
 
+import java.time.LocalTime;
+
 public class CongNhanThongKe {
     private String maNhanVien;
     private String hoTen;
@@ -8,13 +10,18 @@ public class CongNhanThongKe {
     private double thoiGianLam;
     private double thoiGianTangCa;
 
-    public CongNhanThongKe(String maNhanVien, String hoTen, String donVi, String thang, double thoiGianLam, double thoiGianTangCa) {
+    public LocalTime getLastCheckinTime() {
+        return lastCheckinTime;
+    }
+
+    public void setLastCheckinTime(LocalTime lastCheckinTime) {
+        this.lastCheckinTime = lastCheckinTime;
+    }
+
+    private LocalTime lastCheckinTime=LocalTime.of(0,0,0);
+
+    public CongNhanThongKe(String maNhanVien) {
         this.maNhanVien = maNhanVien;
-        this.hoTen = hoTen;
-        this.donVi = donVi;
-        this.thang = thang;
-        this.thoiGianLam = thoiGianLam;
-        this.thoiGianTangCa = thoiGianTangCa;
     }
 
     public String getMaNhanVien() {

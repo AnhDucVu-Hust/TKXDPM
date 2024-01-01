@@ -96,8 +96,8 @@
               <buttons>
                   <Button fx:id="thongKeButton" mnemonicParsing="false" prefHeight="43.0" text="Thống kê" />
                 <Button mnemonicParsing="false" onMouseClicked="#clickXuatBaoCao" prefHeight="44.0" text="Xuất báo cáo" fx:id="xuatBaoCaoButton" />
-                  <Button fx:id="themNhanVienButton" mnemonicParsing="false" onMouseClicked="#clickThemChamCong" prefHeight="57.0" prefWidth="202.0" text="Thêm chấm công" />
-                  <Button fx:id="themNhanVienButton1" mnemonicParsing="false" onMouseClicked="#clickImportExcel" prefHeight="57.0" prefWidth="202.0" text="Import Excel" />
+                  <Button fx:id="themNhanVienButton" mnemonicParsing="false" onMouseClicked="#clickThemChamCong" prefHeight="40.0" prefWidth="202.0" text="Nhân viên" />
+                  <Button fx:id="themNhanVienButton1" mnemonicParsing="false" onMouseClicked="#clickImportExcel" prefHeight="57.0" prefWidth="202.0" text="Thêm từ Excel" />
               </buttons>
             </ButtonBar>
             <ButtonBar layoutX="39.0" layoutY="215.0" prefHeight="40.0" prefWidth="534.0" />

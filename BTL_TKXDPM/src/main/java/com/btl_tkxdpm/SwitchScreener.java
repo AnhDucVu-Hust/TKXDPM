@@ -8,11 +8,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class SwitchScreener {
-    private static Stage primaryStage;
+    public static final Stage primaryStage = new Stage();
 
-    public static void setPrimaryStage(Stage stage) {
-        primaryStage = stage;
-    }
 
     public static void switchScreen(String fxmlFileName) {
         try {

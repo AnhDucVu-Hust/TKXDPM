@@ -14,9 +14,11 @@ import java.util.Iterator;
 
 public class OnSiteHRSubSystem implements IHRSubSystem{
     private ObservableList<NhanVien> listNhanVien = FXCollections.observableArrayList();
+    public OnSiteHRSubSystem(){
+        addNhanVien("/Users/vuanhduc/Downloads/TKXDPM/BTL_TKXDPM/NhanVien.xlsx");
+    }
     @Override
     public ObservableList<NhanVien> getListNhanVien() {
-        addNhanVien("/Users/vuanhduc/Downloads/TKXDPM/BTL_TKXDPM/NhanVien.xlsx");
         return listNhanVien;
     }
 

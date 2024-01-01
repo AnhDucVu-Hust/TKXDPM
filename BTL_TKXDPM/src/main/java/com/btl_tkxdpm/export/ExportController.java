@@ -2,7 +2,10 @@ package com.btl_tkxdpm.export;
 import com.btl_tkxdpm.AttendanceDB.IAttendanceDB;
 import com.btl_tkxdpm.AttendanceDB.OnSiteAttendanceDB;
 import com.btl_tkxdpm.SwitchScreener;
+import com.btl_tkxdpm.entity.CongNhanThongKe;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
+import com.btl_tkxdpm.entity.NhanVienVanPhongThongKe;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -16,28 +19,35 @@ import java.util.ResourceBundle;
 
 public class ExportController implements Initializable {
     private IAttendanceDB attendanceDB;
+
+    public IAttendanceDB getAttendanceDB() {
+        return attendanceDB;
+    }
+
+    public void setAttendanceDB(IAttendanceDB attendanceDB) {
+        this.attendanceDB = attendanceDB;
+    }
+
     @FXML
-    private ChoiceBox<?> donViSearch;
+    private ChoiceBox<String> donViSearch;
     @FXML
     private ChoiceBox namSearch;
     @FXML
-    private ChoiceBox loaiNhanSu;
-    @FXML
-    private TableColumn<NhanVienAttendance, String> tableChucDanh;
+    private ChoiceBox<String> loaiNhanSu;
+
 
     @FXML
-    private TableColumn<NhanVienAttendance, String> tableDiMuonVeSom;
+    private TableColumn<NhanVienVanPhongThongKe, String> tableDiMuonVeSom;
+    @FXML
+    private TableColumn<NhanVienVanPhongThongKe, String> tableTongSoBuoiLam;
 
     @FXML
-    private TableColumn<NhanVienAttendance, String> tableTongSoBuoiLam;
+    private TableColumn<NhanVienVanPhongThongKe, String> tableMaNV;
 
     @FXML
-    private TableColumn<NhanVienAttendance, String> tableMaNV;
-
+    private TableColumn<NhanVienVanPhongThongKe, String> tableTen;
     @FXML
-    private TableColumn<NhanVienAttendance, String> tableTen;
-    @FXML
-    private TableColumn<NhanVienAttendance, String> tableNgay;
+    private TableColumn<NhanVienVanPhongThongKe, String> tableNgay;
 
     @FXML
     private TableView tableNhanVien;
@@ -83,14 +93,22 @@ public class ExportController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        attendanceDB = new OnSiteAttendanceDB();
+        Platform.runLater(() ->
+        {
+        loaiNhanSu.setOnAction(event -> {
+            String selectedOption = loaiNhanSu.getValue();
+            if (selectedOption.equals("Công nhân")){
+                tableCongNhan.setVisible(true);
+                tableNhanVien.setVisible(false);
+            }
+        });
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        tableCongNhan.setItems(attendanceDB.getListCongNhanAttendance());
+        tableCongNhan.setItems(BangChamCongCongNhan.getBangThongKe(attendanceDB.getListCongNhanAttendance()));
         tableNhanVien.setItems(attendanceDB.getListNhanVienAttendace());
-        tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getHoTen()));
+        tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getHoTen()));
         //tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
-        tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getMaNhanVien()));
+        tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMaNhanVien()));
         //tableNgay.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDay().format(dateFormatter)));
         thangSearch.setItems(FXCollections.observableArrayList(
                 "Tất cả", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
@@ -104,5 +122,6 @@ public class ExportController implements Initializable {
                 "Nhân viên văn phòng", "Công nhân"
         ));
         loaiNhanSu.setValue("Công nhân");
+    });
     }
 }

@@ -2,12 +2,21 @@ package com.btl_tkxdpm.home;
 
 import com.btl_tkxdpm.AttendanceDB.IAttendanceDB;
 import com.btl_tkxdpm.AttendanceDB.OnSiteAttendanceDB;
+import com.btl_tkxdpm.HumanResourceDB.IHRSubSystem;
+import com.btl_tkxdpm.HumanResourceDB.OnSiteHRSubSystem;
 import com.btl_tkxdpm.SwitchScreener;
 import com.btl_tkxdpm.add.ImportExcel;
+import com.btl_tkxdpm.edit.EditController;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
+import com.btl_tkxdpm.export.ExportController;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.collections.FXCollections;
@@ -15,12 +24,14 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
-    private IAttendanceDB attendanceDB;
+    private IAttendanceDB attendanceDB = new OnSiteAttendanceDB();
+    private IHRSubSystem hrDB = new OnSiteHRSubSystem();
     @FXML
     private TextField chucDanhAccount;
 
@@ -76,7 +87,7 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        attendanceDB = new OnSiteAttendanceDB();
+
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         tableView.setItems(attendanceDB.getListAttendance());
@@ -84,7 +95,19 @@ public class HomeController implements Initializable {
             if (event.getClickCount() == 2) {
                 NhanVienAttendance selected = tableView.getSelectionModel().getSelectedItem();
                 if (selected != null) {
-                    System.out.println("Double-clicked on: " + selected.getNhanVien().getMaNhanVien() );
+                    try {
+                        FXMLLoader loader = new FXMLLoader(SwitchScreener.class.getResource("/com/btl_tkxdpm/suaChamCong.fxml"));
+                        Parent root = loader.load();
+                        EditController controller = loader.getController();
+                        controller.setLogChamCong(selected);
+                        Scene scene = new Scene(root);
+                        SwitchScreener.primaryStage.setScene(scene);
+                        SwitchScreener.primaryStage.show();
+                        System.out.println("Double-clicked on: " + selected.getNhanVien().getMaNhanVien());
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
 
                 }
             }
@@ -106,7 +129,19 @@ public class HomeController implements Initializable {
     }
     @FXML
     void clickXuatBaoCao(MouseEvent event) {
-        SwitchScreener.switchScreen("/com/btl_tkxdpm/xuatBaoCao.fxml");
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(SwitchScreener.class.getResource("/com/btl_tkxdpm/xuatBaoCao.fxml"));
+                Parent root = loader.load();
+                ExportController controller = loader.getController();
+                controller.setAttendanceDB(attendanceDB);
+                Scene scene = new Scene(root);
+                SwitchScreener.primaryStage.setScene(scene);
+                SwitchScreener.primaryStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         }
     @FXML
     void clickThemChamCong(MouseEvent event){SwitchScreener.switchScreen("/com/btl_tkxdpm/danhSachNhanVien.fxml");}
@@ -124,7 +159,8 @@ public class HomeController implements Initializable {
         if (selectedFile != null) {
             // Handle the selected file
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-            ImportExcel.importExcel(selectedFile.getAbsolutePath());
+            ObservableList<NhanVienAttendance> listFromExcel = ImportExcel.importExcel(selectedFile.getAbsolutePath(),hrDB);
+            attendanceDB.addAttendance(listFromExcel);
         } else {
             System.out.println("File selection canceled.");
         }
