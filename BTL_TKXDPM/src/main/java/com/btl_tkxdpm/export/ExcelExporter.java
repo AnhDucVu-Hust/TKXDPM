@@ -3,6 +3,8 @@ package com.btl_tkxdpm.export;
 import com.btl_tkxdpm.entity.NhanVien;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -11,41 +13,44 @@ import java.io.IOException;
 import java.util.List;
 
 public class ExcelExporter {
-    public static void exportToExcel(ObservableList<NhanVienAttendance> attendanceList, String outputPath) {
-        try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("DanhSachNhanVien");
 
-            // Tạo hàng tiêu đề
-            Row headerRow = sheet.createRow(0);
-            String[] columns = {"Tên,Mã Nhân Viên,Ngày,Giờ ra, Giờ vào, Chức danh"};
+    public static <T> void exportToExcel(TableView<T> tableView, String filePath) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Data");
 
-            for (int i = 0; i < columns.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(columns[i]);
+        // Create header row
+        Row headerRow = sheet.createRow(0);
+        ObservableList<TableColumn<T, ?>> columns = tableView.getColumns();
+
+        for (int i = 0; i < columns.size(); i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(columns.get(i).getText());
+        }
+
+        // Create data rows
+        ObservableList<T> items = tableView.getItems();
+        for (int i = 0; i < items.size(); i++) {
+            Row dataRow = sheet.createRow(i + 1);
+            T item = items.get(i);
+
+            for (int j = 0; j < columns.size(); j++) {
+                Cell cell = dataRow.createCell(j);
+                TableColumn<T, ?> column = columns.get(j);
+                cell.setCellValue(String.valueOf(column.getCellData(item)));
             }
+        }
 
-            // Đổ dữ liệu vào bảng
-            int rowNum = 1;
-
-            for (NhanVienAttendance nhanVienAttendance : attendanceList) {
-                Row row = sheet.createRow(rowNum++);
-                row.createCell(0).setCellValue(nhanVienAttendance.getNhanVien().getHoTen());
-                row.createCell(1).setCellValue(nhanVienAttendance.getNhanVien().getMaNhanVien());
-                row.createCell(2).setCellValue(nhanVienAttendance.getDay().toString());
-                row.createCell(3).setCellValue(nhanVienAttendance.getLoaiChamCong().toString());
-                row.createCell(5).setCellValue(nhanVienAttendance.getGioVao().toString());
-                row.createCell(6).setCellValue(nhanVienAttendance.getNhanVien().getChucDanh());
-            }
-
-            // Ghi workbook ra file
-            try (FileOutputStream outputStream = new FileOutputStream(outputPath)) {
-                workbook.write(outputStream);
-            }
-
-            System.out.println("Xuất Excel thành công!");
-
+        try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
+            workbook.write(fileOut);
+            System.out.println("Exported successfully to: " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

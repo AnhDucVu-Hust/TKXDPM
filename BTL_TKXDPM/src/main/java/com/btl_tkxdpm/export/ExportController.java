@@ -13,7 +13,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.net.URL;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
@@ -76,6 +78,7 @@ public class ExportController implements Initializable {
 
     @FXML
     void clickXacNhan(MouseEvent event) {
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Định dạng báo cáo");
         alert.setHeaderText("Bạn mốn xuất báo cáo dưới định dạng nào:");
@@ -91,13 +94,35 @@ public class ExportController implements Initializable {
         alert.showAndWait().ifPresent(response -> {
             if (response == buttonTypeCSV) {
                 System.out.println("User clicked CSV");
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save CSV File");
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+                File file = fileChooser.showSaveDialog(SwitchScreener.primaryStage);
                 //String donVi = donViSearch.getValue().toString();
-                String thang = thangSearch.getValue().toString();
-                CsvExporter.exportToCsv(attendanceDB.getListAttendance(), "Báo cáo " + thang + ".csv");
+                if (file != null) {
+                    if (donViSearch.getValue().equals("Công nhân")) {
+                        CsvExporter.exportToCSV(tableCongNhan, file.getAbsolutePath());
+                    }
+                    else{
+                        CsvExporter.exportToCSV(tableNhanVien, file.getAbsolutePath());
+                    }
+                }
                 // Add your code for handling "Yes" option
             } else if (response == buttonTypeExcel) {
-                System.out.println("User clicked No");
-                // Add your code for handling "No" option
+                System.out.println("User clicked Excel");
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Excel File");
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+                File file = fileChooser.showSaveDialog(SwitchScreener.primaryStage);
+                //String donVi = donViSearch.getValue().toString();
+                if (file != null) {
+                    if (donViSearch.getValue().equals("Công nhân")) {
+                        ExcelExporter.exportToExcel(tableCongNhan, file.getAbsolutePath());
+                    }
+                    else{
+                        ExcelExporter.exportToExcel(tableNhanVien, file.getAbsolutePath());
+                    }
+                }
             }
         });
     }
