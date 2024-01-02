@@ -1,49 +1,67 @@
 package com.btl_tkxdpm.AttendanceDB;
 
+import com.btl_tkxdpm.HumanResourceDB.OnSiteHRSubSystem;
 import com.btl_tkxdpm.entity.NhanVien;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Iterator;
 
 public class OnSiteAttendanceDB implements  IAttendanceDB{
     private ObservableList<NhanVienAttendance> listAttendance = FXCollections.observableArrayList();
-    private ObservableList<NhanVien> listNhanVien;
+    private ObservableList<NhanVien> listNhanVien = new OnSiteHRSubSystem().getListNhanVien();
     public void themNhanVien(NhanVienAttendance nhanVienAttendance) {
         listAttendance.add(nhanVienAttendance);
     }
-    public OnSiteAttendanceDB(){
-        themNhanVien(new NhanVienAttendance(1,
-                new NhanVien("Vũ Anh Đức","00000","Nhân viên văn phòng","Phòng Sản phẩm"),
-                LocalDate.parse("2023-11-02"),
-                LocalTime.parse("07:00:00"),
-                "CHECKIN"
-
-                )
-        );
-        themNhanVien(new NhanVienAttendance(2,
-                        new NhanVien("Phạm Xuân Trường","00001","Công nhân","Phòng Kĩ Thuật"),
-                        LocalDate.parse("2023-11-02"),
-                        LocalTime.parse("17:30:00"),
-                        "CHECKOUT"
-                )
-        );
-        themNhanVien(new NhanVienAttendance(3,
-                        new NhanVien("Vũ Văn Mạnh","00003","Công nhân","Nhân viên"),
-                        LocalDate.parse("2023-11-02"),
-                        LocalTime.parse("07:00:00"),
-                        "CHECKIN"
-                )
-        );
-        themNhanVien(new NhanVienAttendance(4,
-                        new NhanVien("Nguyễn Văn Mạnh","00004","Nhân viên văn phòng","Nhân viên"),
-                        LocalDate.parse("2023-11-02"),
-                        LocalTime.parse("17:30:00"),
-                       "CHECKOUT"
-                )
-        );
+    public OnSiteAttendanceDB() {
+        String url = "/Users/vuanhduc/Downloads/TKXDPM/BTL_TKXDPM/src/main/java/com/btl_tkxdpm/cham_cong_data (2).xlsx";
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        try (FileInputStream inputStream = new FileInputStream(new File(url))) {
+            Workbook workbook = WorkbookFactory.create(inputStream);
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rowIterator = sheet.iterator();
+            boolean isFirstRow = true;
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                if (isFirstRow) {
+                    isFirstRow = false;
+                    continue;
+                }
+                String maNhanVien = row.getCell(0).getStringCellValue();
+                Date day = row.getCell(1).getDateCellValue();
+                LocalTime gio = LocalTime.parse(row.getCell(2).getStringCellValue(), timeFormatter);
+                double id = row.getCell(4).getNumericCellValue();
+                NhanVien nhanvien = null;
+                for (NhanVien nv : listNhanVien) {
+                    if (nv.getMaNhanVien().equals(maNhanVien)) {
+                        System.out.println(nv.getMaNhanVien());
+                        nhanvien = nv;
+                        System.out.println("Mã nhân viên khớp");
+                        break;
+                    }
+                }
+                String loaiChamCong = row.getCell(3).getStringCellValue();
+                if (nhanvien != null) {
+                    themNhanVien(new NhanVienAttendance((int) id, nhanvien, day.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), gio, loaiChamCong));
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public ObservableList<NhanVienAttendance> getListAttendance(){
         return listAttendance;
