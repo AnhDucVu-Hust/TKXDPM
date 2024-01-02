@@ -26,7 +26,7 @@ public class OnSiteAttendanceDB implements  IAttendanceDB{
         listAttendance.add(nhanVienAttendance);
     }
     public OnSiteAttendanceDB() {
-        String url = "/Users/vuanhduc/Downloads/TKXDPM/BTL_TKXDPM/src/main/java/com/btl_tkxdpm/cham_cong_data (2).xlsx";
+        String url = "E:\\TKPM\\finalProject\\TKXDPM\\BTL_TKXDPM\\src\\main\\java\\com\\btl_tkxdpm\\cham_cong_data (2).xlsx";
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         try (FileInputStream inputStream = new FileInputStream(new File(url))) {

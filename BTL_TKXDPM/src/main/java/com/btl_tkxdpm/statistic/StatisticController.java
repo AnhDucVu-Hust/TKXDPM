@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.function.DoubleUnaryOperator;
@@ -150,7 +152,7 @@ public class StatisticController implements Initializable {
             loaiNhanSu.setValue("Công nhân");
         });
     }
-    void Search(String thang, String donVi){
+    public void Search(String thang, String donVi){
         if (loaiNhanSu.getValue().equals("Công nhân")) {
             if (thang.equals("Tất cả") && donVi.equals("Tất cả")) {
                 System.out.println("Do nothing");
@@ -175,6 +177,17 @@ public class StatisticController implements Initializable {
                 tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)).filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang)))));
             }
         }
+    }
+    public static List<String> trySearchName(ObservableList<NhanVienVanPhongThongKe> list, String thang){
+        List<String> name = new ArrayList<>();
+        for(int i=0;i<list.size(); i++){
+            if(list.get(i).getThang().equals(thang)) {
+                name.add(list.get(i).getHoTen());
+
+            }
+
+        }
+        return name;
     }
     @FXML
     void clickSearch(MouseEvent event) {

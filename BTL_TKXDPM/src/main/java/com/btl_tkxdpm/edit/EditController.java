@@ -22,6 +22,7 @@ import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class EditController implements Initializable {
+
     public IAttendanceDB getAttendanceDB() {
         return attendanceDB;
     }
@@ -30,7 +31,7 @@ public class EditController implements Initializable {
         this.attendanceDB = attendanceDB;
     }
 
-    private IAttendanceDB attendanceDB;
+    private static IAttendanceDB attendanceDB;
     public NhanVienAttendance getLogChamCong() {
         return logChamCong;
     }
@@ -42,7 +43,7 @@ public class EditController implements Initializable {
     private NhanVienAttendance logChamCong;
     @FXML
     private Label chucDanh;
-    void editAttendance(NhanVienAttendance log, LocalDate ngay, LocalTime gio,String loaiChamCong){
+    public static void editAttendance(NhanVienAttendance log, LocalDate ngay, LocalTime gio, String loaiChamCong){
         log.setDay(ngay);
         log.setGioVao(gio);
         log.setLoaiChamCong(loaiChamCong);
