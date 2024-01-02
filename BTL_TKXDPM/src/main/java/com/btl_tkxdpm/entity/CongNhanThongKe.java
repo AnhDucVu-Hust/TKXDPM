@@ -7,8 +7,8 @@ public class CongNhanThongKe {
     private String hoTen;
     private String donVi;
     private String thang;
-    private double thoiGianLam;
-    private double thoiGianTangCa;
+    private double thoiGianLam=0;
+    private double thoiGianTangCa=0;
 
     public LocalTime getLastCheckinTime() {
         return lastCheckinTime;
@@ -23,7 +23,6 @@ public class CongNhanThongKe {
     public CongNhanThongKe(String maNhanVien) {
         this.maNhanVien = maNhanVien;
     }
-
     public String getMaNhanVien() {
         return maNhanVien;
     }

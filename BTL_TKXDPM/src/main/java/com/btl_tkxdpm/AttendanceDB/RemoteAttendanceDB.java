@@ -31,4 +31,14 @@ public class RemoteAttendanceDB implements  IAttendanceDB {
     public void addAttendance(ObservableList<NhanVienAttendance> listChamCong) {
 
     }
+
+    @Override
+    public void editAttendance(NhanVienAttendance editedAttendance) {
+
+    }
+
+    @Override
+    public ObservableList<NhanVienAttendance> queryByTenOrID(ObservableList<NhanVienAttendance> listChamCong, String query) {
+        return null;
+    }
 }

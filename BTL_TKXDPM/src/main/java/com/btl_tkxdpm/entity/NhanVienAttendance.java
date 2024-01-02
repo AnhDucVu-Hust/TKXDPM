@@ -7,12 +7,22 @@ import java.time.LocalTime;
 import java.util.Date;
 
 public class NhanVienAttendance {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private int id;
     private NhanVien nhanVien;
-    private final LocalDate day;
+    private  LocalDate day;
     private LocalTime gioVao;
     private String loaiChamCong;
 
-    public NhanVienAttendance(NhanVien nhanVien, LocalDate day, LocalTime gioVao, String loaiChamCong) {
+    public NhanVienAttendance(int id,NhanVien nhanVien, LocalDate day, LocalTime gioVao, String loaiChamCong) {
+        this.id =id;
         this.nhanVien = nhanVien;
         this.day = day;
         this.gioVao = gioVao;
@@ -29,6 +39,9 @@ public class NhanVienAttendance {
 
     public LocalDate getDay() {
         return day;
+    }
+    public void setDay(LocalDate day) {
+        this.day=day;
     }
 
     public LocalTime getGioVao() {

@@ -21,13 +21,14 @@ public class Services {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                Integer id = resultSet.getInt("id");
                 String maNhanVien = resultSet.getString("maNhanVien");
                 Date ngay = resultSet.getDate("ngay");
                 Time thoiGian = resultSet.getTime("thoiGian");
                 String loaiChamCong = resultSet.getString("loaiChamCong");
                 NhanVien nhanVien = queryNhanVienBangMa(maNhanVien).get(0);
 
-                listAttendance.add(new NhanVienAttendance(nhanVien,ngay.toLocalDate(),thoiGian.toLocalTime(),loaiChamCong));
+                listAttendance.add(new NhanVienAttendance(id,nhanVien,ngay.toLocalDate(),thoiGian.toLocalTime(),loaiChamCong));
 
             }
 
@@ -48,13 +49,14 @@ public class Services {
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                Integer id = resultSet.getInt("id");
                 String maNhanVien = resultSet.getString("maNhanVien");
                 Date ngay = resultSet.getDate("ngay");
                 Time thoiGian = resultSet.getTime("thoiGian");
                 String loaiChamCong = resultSet.getString("loaiChamCong");
                 NhanVien nhanVien = queryNhanVienBangMa(maNhanVien).get(0);
 
-                listAttendance.add(new NhanVienAttendance(nhanVien,ngay.toLocalDate(),thoiGian.toLocalTime(),loaiChamCong));
+                listAttendance.add(new NhanVienAttendance(id,nhanVien,ngay.toLocalDate(),thoiGian.toLocalTime(),loaiChamCong));
 
             }
 

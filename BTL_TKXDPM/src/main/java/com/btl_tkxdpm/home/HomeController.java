@@ -26,10 +26,17 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
+    public void setAttendanceDB(IAttendanceDB attendanceDB) {
+        this.attendanceDB = attendanceDB;
+    }
+
     private IAttendanceDB attendanceDB = new OnSiteAttendanceDB();
     private IHRSubSystem hrDB = new OnSiteHRSubSystem();
     @FXML
@@ -83,49 +90,83 @@ public class HomeController implements Initializable {
     private TableView<NhanVienAttendance> tableView;
 
 
+    private void querybyThangvaDonVi(String thang,String donVi){
+        if (thang.equals("Tất cả") && donVi.equals("Tất cả") ){
+            System.out.println("Do nothing");
+        }
+        else if (donVi.equals("Tất cả")){
+            tableView.setItems(attendanceDB.getListAttendance().filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang))));
+        }
+        else if (thang.equals("Tất cả")){
+            tableView.setItems(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)));
+        }
+        else{
+            tableView.setItems(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)).filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang))));
 
+
+        }
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Set<String> uniqueDonVi = attendanceDB.getListAttendance().stream()
+                .map(c -> c.getNhanVien().getDonVi())
+                .collect(Collectors.toSet());
+        uniqueDonVi.add("Tất cả");
+        Platform.runLater(()-> {
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            tableView.setItems(attendanceDB.getListAttendance());
+            tableView.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    NhanVienAttendance selected = tableView.getSelectionModel().getSelectedItem();
+                    if (selected != null) {
+                        try {
+                            FXMLLoader loader = new FXMLLoader(SwitchScreener.class.getResource("/com/btl_tkxdpm/suaChamCong.fxml"));
+                            Parent root = loader.load();
+                            EditController controller = loader.getController();
+                            controller.setLogChamCong(selected);
+                            controller.setAttendanceDB(attendanceDB);
+                            Scene scene = new Scene(root);
+                            SwitchScreener.primaryStage.setScene(scene);
+                            SwitchScreener.primaryStage.show();
+                            System.out.println("Double-clicked on: " + selected.getNhanVien().getMaNhanVien());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        tableView.setItems(attendanceDB.getListAttendance());
-        tableView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                NhanVienAttendance selected = tableView.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    try {
-                        FXMLLoader loader = new FXMLLoader(SwitchScreener.class.getResource("/com/btl_tkxdpm/suaChamCong.fxml"));
-                        Parent root = loader.load();
-                        EditController controller = loader.getController();
-                        controller.setLogChamCong(selected);
-                        Scene scene = new Scene(root);
-                        SwitchScreener.primaryStage.setScene(scene);
-                        SwitchScreener.primaryStage.show();
-                        System.out.println("Double-clicked on: " + selected.getNhanVien().getMaNhanVien());
                     }
-                    catch (Exception e){
-                        e.printStackTrace();
-                    }
-
                 }
-            }
+            });
+            donViSearch.setItems(FXCollections.observableArrayList(uniqueDonVi));
+            donViSearch.setValue("Tất cả");
+            thangSearch.setOnAction(actionEvent -> {
+                String thang = thangSearch.getValue();
+                String donVi = donViSearch.getValue();
+                querybyThangvaDonVi(thang, donVi);
+            });
+            donViSearch.setOnAction(actionEvent -> {
+                String thang = thangSearch.getValue();
+                String donVi = donViSearch.getValue();
+                querybyThangvaDonVi(thang, donVi);
+            });
+
+            tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getHoTen()));
+            tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
+            tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getMaNhanVien()));
+            tableGioRa.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getLoaiChamCong()));
+            tableGioVao.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getGioVao().format(timeFormatter)));
+            tableNgay.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDay().format(dateFormatter)));
+            thangSearch.setItems(FXCollections.observableArrayList(
+                    "Tất cả", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
+            ));
+
+            thangSearch.setValue("Tất cả");
         });
-        tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getHoTen()));
-        tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
-        tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getMaNhanVien()));
-        tableGioRa.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getLoaiChamCong()));
-        tableGioVao.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getGioVao().format(timeFormatter)));
-        tableNgay.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDay().format(dateFormatter)));
-        thangSearch.setItems(FXCollections.observableArrayList(
-                "Tất cả", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
-        ));
-        namSearch.setItems(FXCollections.observableArrayList(
-                "Tất cả","2015","2016","2017","2018","2019","2020","2021","2022","2023"
-        ));
-        thangSearch.setValue("Tất cả");
-        namSearch.setValue("Tất cả");
+    }
+    @FXML
+    void clickSearch(MouseEvent event){
+        String query = search.getText();
+        tableView.setItems(attendanceDB.queryByTenOrID(attendanceDB.getListAttendance(),query));
     }
     @FXML
     void clickXuatBaoCao(MouseEvent event) {

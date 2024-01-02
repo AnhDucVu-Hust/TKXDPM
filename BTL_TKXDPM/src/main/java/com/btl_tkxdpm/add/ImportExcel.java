@@ -39,6 +39,7 @@ public class ImportExcel {
                 String maNhanVien = row.getCell(0).getStringCellValue();
                 Date day = row.getCell(1).getDateCellValue();
                 LocalTime gio = LocalTime.parse(row.getCell(2).getStringCellValue(),timeFormatter);
+                int id = Integer.parseInt(row.getCell(4).getStringCellValue());
                 NhanVien nhanvien = null;
                 for (NhanVien nv: listNhanVien){
                     if (nv.getMaNhanVien().equals(maNhanVien)){
@@ -50,7 +51,7 @@ public class ImportExcel {
                 }
                 String loaiChamCong = row.getCell(3).getStringCellValue();
                 if (nhanvien!=null){
-                    listChamCong.add(new NhanVienAttendance(nhanvien,day.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),gio,loaiChamCong));
+                    listChamCong.add(new NhanVienAttendance(id,nhanvien,day.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),gio,loaiChamCong));
                 }
 
                 //Services.addNhanVien(new NhanVien(hoTen,maNhanVien,donVi,chucDanh));

@@ -15,7 +15,7 @@ public class OnSiteAttendanceDB implements  IAttendanceDB{
         listAttendance.add(nhanVienAttendance);
     }
     public OnSiteAttendanceDB(){
-        themNhanVien(new NhanVienAttendance(
+        themNhanVien(new NhanVienAttendance(1,
                 new NhanVien("Vũ Anh Đức","00000","Nhân viên văn phòng","Phòng Sản phẩm"),
                 LocalDate.parse("2023-11-02"),
                 LocalTime.parse("07:00:00"),
@@ -23,21 +23,21 @@ public class OnSiteAttendanceDB implements  IAttendanceDB{
 
                 )
         );
-        themNhanVien(new NhanVienAttendance(
+        themNhanVien(new NhanVienAttendance(2,
                         new NhanVien("Phạm Xuân Trường","00001","Công nhân","Phòng Kĩ Thuật"),
                         LocalDate.parse("2023-11-02"),
                         LocalTime.parse("17:30:00"),
                         "CHECKOUT"
                 )
         );
-        themNhanVien(new NhanVienAttendance(
+        themNhanVien(new NhanVienAttendance(3,
                         new NhanVien("Vũ Văn Mạnh","00003","Công nhân","Nhân viên"),
                         LocalDate.parse("2023-11-02"),
                         LocalTime.parse("07:00:00"),
                         "CHECKIN"
                 )
         );
-        themNhanVien(new NhanVienAttendance(
+        themNhanVien(new NhanVienAttendance(4,
                         new NhanVien("Nguyễn Văn Mạnh","00004","Nhân viên văn phòng","Nhân viên"),
                         LocalDate.parse("2023-11-02"),
                         LocalTime.parse("17:30:00"),
@@ -63,5 +63,27 @@ public class OnSiteAttendanceDB implements  IAttendanceDB{
     public void addAttendance(ObservableList<NhanVienAttendance> listChamCong) {
         listAttendance.addAll(listChamCong);
     }
+
+    @Override
+    public void editAttendance(NhanVienAttendance editedAttendance) {
+        int id = editedAttendance.getId();
+        for (NhanVienAttendance attendance: listAttendance){
+            if (attendance.getId() == id){
+                attendance = editedAttendance;
+            }
+        }
+
+    }
+
+    @Override
+    public ObservableList<NhanVienAttendance> queryByTenOrID(ObservableList<NhanVienAttendance> listChamCong, String query) {
+        if (query.equals("")){
+            return listChamCong;
+        }
+        ObservableList<NhanVienAttendance> listFiltered = listChamCong.filtered(c -> (c.getNhanVien().getHoTen().contains(query) || c.getNhanVien().getMaNhanVien().contains(query)));
+       return listFiltered;
+    }
+
+
 
 }

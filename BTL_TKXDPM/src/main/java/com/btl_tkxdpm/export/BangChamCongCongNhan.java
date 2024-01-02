@@ -6,6 +6,7 @@ import com.btl_tkxdpm.Services;
 import com.btl_tkxdpm.entity.CongNhanThongKe;
 import com.btl_tkxdpm.entity.NhanVien;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.Connection;
@@ -25,15 +26,17 @@ public class BangChamCongCongNhan {
             String maNV = attendance.getNhanVien().getMaNhanVien();
             thongKeMap.computeIfAbsent(maNV, k -> new CongNhanThongKe(attendance.getNhanVien().getMaNhanVien()));
             CongNhanThongKe thongKe =  thongKeMap.get(maNV);
-
+            thongKe.setHoTen(attendance.getNhanVien().getHoTen());
             if (attendance.getLoaiChamCong().equals("CHECKOUT")){
+                LocalTime checkin_time = attendance.getGioVao();
                 ObservableList<NhanVienAttendance> checkin_day = attendanceDB.filtered(c -> c.getDay()==attendance.getDay()).filtered(c -> c.getLoaiChamCong().equals("CHECKIN"));
                 if (checkin_day != null && checkin_day.size()>0){
-
+                    checkin_time = checkin_day.get(0).getGioVao();
                 }
+                thongKe.setThoiGianLam(thongKe.getThoiGianLam()+Services.SubtractLocalTime(attendance.getGioVao(),checkin_time));
             }
         }
-        return null;
+        return FXCollections.observableArrayList(thongKeMap.values());
     }
 }
 

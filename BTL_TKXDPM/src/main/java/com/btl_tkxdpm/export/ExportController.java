@@ -6,6 +6,8 @@ import com.btl_tkxdpm.entity.CongNhanThongKe;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import com.btl_tkxdpm.entity.NhanVienVanPhongThongKe;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.function.DoubleUnaryOperator;
 
 public class ExportController implements Initializable {
     private IAttendanceDB attendanceDB;
@@ -30,8 +33,7 @@ public class ExportController implements Initializable {
 
     @FXML
     private ChoiceBox<String> donViSearch;
-    @FXML
-    private ChoiceBox namSearch;
+
     @FXML
     private ChoiceBox<String> loaiNhanSu;
 
@@ -53,7 +55,14 @@ public class ExportController implements Initializable {
     private TableView tableNhanVien;
     @FXML
     private TableView tableCongNhan;
-
+    @FXML
+    private TableColumn<CongNhanThongKe,String> tableTenCN;
+    @FXML
+    private TableColumn<CongNhanThongKe,String> tableMaNVCN;
+    @FXML
+    private TableColumn<CongNhanThongKe,String> tableTongGioLamCN;
+    @FXML
+    private TableColumn<CongNhanThongKe, Double> tableTangCaCN;
     @FXML
     private ChoiceBox<String> thangSearch;
 
@@ -81,8 +90,7 @@ public class ExportController implements Initializable {
                 System.out.println("User clicked CSV");
                 //String donVi = donViSearch.getValue().toString();
                 String thang = thangSearch.getValue().toString();
-                String nam = namSearch.getValue().toString();
-                CsvExporter.exportToCsv(attendanceDB.getListAttendance(), "Báo cáo "+thang+"_"+nam+".csv" );
+                CsvExporter.exportToCsv(attendanceDB.getListAttendance(), "Báo cáo "+thang+".csv" );
                 // Add your code for handling "Yes" option
             } else if (response == buttonTypeExcel) {
                 System.out.println("User clicked No");
@@ -106,18 +114,15 @@ public class ExportController implements Initializable {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         tableCongNhan.setItems(BangChamCongCongNhan.getBangThongKe(attendanceDB.getListCongNhanAttendance()));
         tableNhanVien.setItems(attendanceDB.getListNhanVienAttendace());
-        tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getHoTen()));
+        tableTenCN.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getHoTen()));
         //tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
-        tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMaNhanVien()));
+        tableMaNVCN.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMaNhanVien()));
         //tableNgay.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDay().format(dateFormatter)));
         thangSearch.setItems(FXCollections.observableArrayList(
                 "Tất cả", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
         ));
-        namSearch.setItems(FXCollections.observableArrayList(
-                "Tất cả","2015","2016","2017","2018","2019","2020","2021","2022","2023"
-        ));
+        tableTongGioLamCN.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getThoiGianLam())));
         thangSearch.setValue("Tất cả");
-        namSearch.setValue("Tất cả");
         loaiNhanSu.setItems(FXCollections.observableArrayList(
                 "Nhân viên văn phòng", "Công nhân"
         ));

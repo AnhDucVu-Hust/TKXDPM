@@ -10,4 +10,6 @@ public interface IAttendanceDB {
     public ObservableList<NhanVienAttendance> getListNhanVienAttendace();
 
     public void addAttendance(ObservableList<NhanVienAttendance> listChamCong);
+    public void editAttendance(NhanVienAttendance editedAttendance);
+    public ObservableList<NhanVienAttendance> queryByTenOrID(ObservableList<NhanVienAttendance> listChamCong,String query);
 }

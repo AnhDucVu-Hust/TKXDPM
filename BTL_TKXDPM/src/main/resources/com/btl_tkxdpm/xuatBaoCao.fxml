@@ -108,12 +108,12 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Button>
-            <TableView fx:id="tableNhanVien" layoutY="221.0" prefHeight="319.0" prefWidth="650.0">
+            <TableView fx:id="tableNhanVien" layoutY="221.0" prefHeight="319.0" prefWidth="650.0" visible="false">
                <columns>
                   <TableColumn fx:id="tableTen" prefWidth="114.94215285778046" text="Tên" />
                   <TableColumn fx:id="tableMaNV" minWidth="5.0" prefWidth="146.99260711669922" text="Mã Nhân Viên" />
-                  <TableColumn fx:id="tableNgay" prefWidth="190.09652709960938" text="Tổng số buổi làm" />
-                  <TableColumn fx:id="tableChucDanh" prefWidth="196.5" text="Tổng số giờ đi muộn/về sớm" />
+                  <TableColumn fx:id="tableTongSoBuoiLam" prefWidth="190.09652709960938" text="Tổng số buổi làm" />
+                  <TableColumn fx:id="tableDiMuonVeSom" prefWidth="196.5" text="Tổng số giờ đi muộn/về sớm" />
                </columns>
             </TableView>
             <Text layoutX="275.0" layoutY="564.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bảng xem trước">
@@ -137,12 +137,12 @@
                   </ImageView>
                </graphic>
             </Button>
-            <TableView fx:id="tableCongNhan" layoutX="-2.0" layoutY="220.0" prefHeight="320.0" prefWidth="652.0" visible="false">
+            <TableView fx:id="tableCongNhan" layoutX="-2.0" layoutY="220.0" prefHeight="320.0" prefWidth="652.0">
                <columns>
-                  <TableColumn fx:id="tableTen1" prefWidth="114.94215285778046" text="Tên" />
-                  <TableColumn fx:id="tableMaNV1" minWidth="5.0" prefWidth="146.99260711669922" text="Mã Nhân Viên" />
-                  <TableColumn fx:id="tableNgay1" prefWidth="162.00735473632812" text="Tổng số giờ làm việc" />
-                  <TableColumn fx:id="tableChucDanh1" prefWidth="223.54891967773438" text="Tổng số giờ tăng ca" />
+                  <TableColumn fx:id="tableTenCN" prefWidth="114.94215285778046" text="Tên" />
+                  <TableColumn fx:id="tableMaNVCN" minWidth="5.0" prefWidth="146.99260711669922" text="Mã Nhân Viên" />
+                  <TableColumn fx:id="tableTongGioLamCN" prefWidth="162.00735473632812" text="Tổng số giờ làm việc" />
+                  <TableColumn fx:id="tableTangCaCN" prefWidth="223.54891967773438" text="Tổng số giờ tăng ca" />
                </columns>
             </TableView>
          </children>
