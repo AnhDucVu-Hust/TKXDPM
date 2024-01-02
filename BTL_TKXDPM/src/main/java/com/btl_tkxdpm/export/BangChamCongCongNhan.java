@@ -33,6 +33,9 @@ public class BangChamCongCongNhan {
                 if (checkin_day != null && checkin_day.size()>0){
                     checkin_time = checkin_day.get(0).getGioVao();
                 }
+                if (attendance.getGioVao().isAfter(LocalTime.of(17, 30))){
+                    thongKe.setThoiGianTangCa(thongKe.getThoiGianTangCa()-Services.SubtractLocalTime(attendance.getGioVao(),LocalTime.of(17,30)));
+                }
                 thongKe.setThoiGianLam(thongKe.getThoiGianLam()+Services.SubtractLocalTime(attendance.getGioVao(),checkin_time));
             }
         }

@@ -121,14 +121,8 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Text>
-            <Text layoutX="45.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Năm" wrappingWidth="47.86376953125">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Text>
-            <ChoiceBox fx:id="namSearch" layoutX="101.0" layoutY="147.0" prefHeight="26.0" prefWidth="94.0" />
             <ChoiceBox fx:id="loaiNhanSu" layoutX="99.0" layoutY="94.0" prefHeight="26.0" prefWidth="94.0" />
-            <Button layoutX="467.0" layoutY="146.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0">
+            <Button layoutX="467.0" layoutY="146.0" mnemonicParsing="false" onMouseClicked="#clickSearch" prefHeight="26.0" prefWidth="52.0">
                <graphic>
                   <ImageView fitHeight="18.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                      <image>
