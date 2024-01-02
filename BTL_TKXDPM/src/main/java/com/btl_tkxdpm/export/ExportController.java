@@ -6,9 +6,7 @@ import com.btl_tkxdpm.entity.CongNhanThongKe;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import com.btl_tkxdpm.entity.NhanVienVanPhongThongKe;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -56,15 +54,15 @@ public class ExportController implements Initializable {
     private TableColumn<NhanVienVanPhongThongKe, String> tableNgay;
 
     @FXML
-    private TableView tableNhanVien;
+    private TableView <NhanVienVanPhongThongKe>tableNhanVien;
     @FXML
-    private TableView tableCongNhan;
+    private TableView<CongNhanThongKe> tableCongNhan;
     @FXML
-    private TableColumn<CongNhanThongKe,String> tableTenCN;
+    private TableColumn<CongNhanThongKe, String> tableTenCN;
     @FXML
-    private TableColumn<CongNhanThongKe,String> tableMaNVCN;
+    private TableColumn<CongNhanThongKe, String> tableMaNVCN;
     @FXML
-    private TableColumn<CongNhanThongKe,String> tableTongGioLamCN;
+    private TableColumn<CongNhanThongKe, String> tableTongGioLamCN;
     @FXML
     private TableColumn<CongNhanThongKe, String> tableTangCaCN;
     @FXML
@@ -83,7 +81,7 @@ public class ExportController implements Initializable {
         alert.setHeaderText("Bạn mốn xuất báo cáo dưới định dạng nào:");
 
         // Create two buttons
-        ButtonType buttonTypeExcel=new ButtonType("Excel");
+        ButtonType buttonTypeExcel = new ButtonType("Excel");
         ButtonType buttonTypeCSV = new ButtonType("CSV");
 
         // Set buttons in the alert
@@ -95,7 +93,7 @@ public class ExportController implements Initializable {
                 System.out.println("User clicked CSV");
                 //String donVi = donViSearch.getValue().toString();
                 String thang = thangSearch.getValue().toString();
-                CsvExporter.exportToCsv(attendanceDB.getListAttendance(), "Báo cáo "+thang+".csv" );
+                CsvExporter.exportToCsv(attendanceDB.getListAttendance(), "Báo cáo " + thang + ".csv");
                 // Add your code for handling "Yes" option
             } else if (response == buttonTypeExcel) {
                 System.out.println("User clicked No");
@@ -106,8 +104,11 @@ public class ExportController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //ObservableList<NhanVienVanPhongThongKe> listNVVP = BangChamCongNVVP.getBangChamCong(attendanceDB.getListNhanVienAttendace());
         Platform.runLater(() ->
-        {ObservableList<CongNhanThongKe> listCongNhan = BangChamCongCongNhan.getBangThongKe(attendanceDB.getListCongNhanAttendance());
+        {
+            ObservableList<CongNhanThongKe> listCongNhan = BangChamCongCongNhan.getBangThongKe(attendanceDB.getListCongNhanAttendance());
+            ObservableList<NhanVienVanPhongThongKe> listNVVP = BangChamCongNVVP.getBangChamCong(attendanceDB.getListNhanVienAttendace());
             Set<String> uniqueDonVi = attendanceDB.getListAttendance().stream()
                     .map(c -> c.getNhanVien().getDonVi())
                     .collect(Collectors.toSet());
@@ -115,49 +116,75 @@ public class ExportController implements Initializable {
             donViSearch.setItems(FXCollections.observableArrayList(uniqueDonVi));
             donViSearch.setValue("Tất cả");
             loaiNhanSu.setOnAction(event -> {
-            String selectedOption = loaiNhanSu.getValue();
-            if (selectedOption.equals("Công nhân")){
-                tableCongNhan.setVisible(true);
-                tableNhanVien.setVisible(false);
-            }
+                String selectedOption = loaiNhanSu.getValue();
+                if (selectedOption.equals("Công nhân")) {
+                    tableCongNhan.setVisible(true);
+                    tableNhanVien.setVisible(false);
+                }
+            });
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            tableCongNhan.setItems(listCongNhan);
+            tableNhanVien.setItems(listNVVP);
+            //Table công nhân
+            tableTenCN.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getHoTen()));
+            tableMaNVCN.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMaNhanVien()));
+            tableTongGioLamCN.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getThoiGianLam())));
+            tableTangCaCN.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getThoiGianTangCa())));
+
+            tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getHoTen()));
+            tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMaNhanVien()));
+            tableTongSoBuoiLam.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getNhungNgayDiLam().size())));
+            tableDiMuonVeSom.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getSoGioDiMuonVeSom())));
+            loaiNhanSu.setOnAction(actionEvent -> {
+                String loai = loaiNhanSu.getValue();
+                if (loai.equals("Công nhân")) {
+                    tableCongNhan.setVisible(true);
+                    tableNhanVien.setVisible(false);
+                } else {
+                    tableCongNhan.setVisible(false);
+                    tableNhanVien.setVisible(true);
+                }
+            });
+            thangSearch.setItems(FXCollections.observableArrayList(
+                    "Tất cả", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
+            ));
+
+            thangSearch.setValue("Tất cả");
+            loaiNhanSu.setItems(FXCollections.observableArrayList(
+                    "Nhân viên văn phòng", "Công nhân"
+            ));
+            loaiNhanSu.setValue("Công nhân");
         });
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        tableCongNhan.setItems(listCongNhan);
-        tableNhanVien.setItems(attendanceDB.getListNhanVienAttendace());
-        tableTenCN.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getHoTen()));
-        //tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
-        tableMaNVCN.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMaNhanVien()));
-        //tableNgay.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDay().format(dateFormatter)));
-        thangSearch.setItems(FXCollections.observableArrayList(
-                "Tất cả", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
-        ));
-        tableTongGioLamCN.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getThoiGianLam())));
-        tableTangCaCN.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getThoiGianTangCa())));
-        thangSearch.setValue("Tất cả");
-        loaiNhanSu.setItems(FXCollections.observableArrayList(
-                "Nhân viên văn phòng", "Công nhân"
-        ));
-        loaiNhanSu.setValue("Công nhân");
-    });
     }
+
     @FXML
-    void clickSearch(MouseEvent event){
+    void clickSearch(MouseEvent event) {
         String thang = thangSearch.getValue();
         String donVi = donViSearch.getValue();
-        if (thang.equals("Tất cả") && donVi.equals("Tất cả") ){
-            System.out.println("Do nothing");
+        if (loaiNhanSu.getValue().equals("Công nhân")) {
+            if (thang.equals("Tất cả") && donVi.equals("Tất cả")) {
+                System.out.println("Do nothing");
+            } else if (donVi.equals("Tất cả")) {
+                Month month = Month.of(Integer.parseInt(thang));
+                tableCongNhan.setItems(BangChamCongCongNhan.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getDay().getMonth() == month)));
+            } else if (thang.equals("Tất cả")) {
+                tableCongNhan.setItems(BangChamCongCongNhan.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi))));
+            } else {
+                tableCongNhan.setItems(BangChamCongCongNhan.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)).filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang)))));
+            }
         }
-        else if (donVi.equals("Tất cả")){
-            Month month = Month.of(Integer.parseInt(thang));
-           tableCongNhan.setItems(BangChamCongCongNhan.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getDay().getMonth() == month)));
+        else {
+            if (thang.equals("Tất cả") && donVi.equals("Tất cả")) {
+                System.out.println("Do nothing");
+            } else if (donVi.equals("Tất cả")) {
+                Month month = Month.of(Integer.parseInt(thang));
+                tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getDay().getMonth() == month)));
+            } else if (thang.equals("Tất cả")) {
+                tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi))));
+            } else {
+                tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)).filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang)))));
+            }
         }
-        else if (thang.equals("Tất cả")){
-            tableCongNhan.setItems(BangChamCongCongNhan.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi))));
-        }
-        else{
-            tableCongNhan.setItems(BangChamCongCongNhan.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)).filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang)))));
-        }
-
     }
 }

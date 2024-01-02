@@ -1,10 +1,14 @@
 package com.btl_tkxdpm.entity;
 
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
 
 public class NhanVienAttendance {
     public int getId() {
@@ -20,6 +24,7 @@ public class NhanVienAttendance {
     private  LocalDate day;
     private LocalTime gioVao;
     private String loaiChamCong;
+
 
     public NhanVienAttendance(int id,NhanVien nhanVien, LocalDate day, LocalTime gioVao, String loaiChamCong) {
         this.id =id;

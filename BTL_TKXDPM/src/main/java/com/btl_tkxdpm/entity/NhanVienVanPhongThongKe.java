@@ -1,12 +1,27 @@
 package com.btl_tkxdpm.entity;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 public class NhanVienVanPhongThongKe {
     private String maNhanVien;
     private String hoTen;
     private String donVi;
     private String thang;
-    private int soBuoiDiLam;
-    private double soGioDiMuonVeSom;
+    private int soBuoiDiLam=0;
+    private double soGioDiMuonVeSom=0;
+    public Set<LocalDate> getNhungNgayDiLam() {
+        return nhungNgayDiLam;
+    }
+
+    public void addNhungNgayDiLam(LocalDate ngayDiLam) {
+        this.nhungNgayDiLam.add(ngayDiLam);
+    }
+
+    private Set<LocalDate> nhungNgayDiLam = new HashSet<LocalDate>();
 
     public NhanVienVanPhongThongKe(String maNhanVien, String hoTen, String donVi, String thang, int soBuoiDiLam, double soGioDiMuonVeSom) {
         this.maNhanVien = maNhanVien;
@@ -15,6 +30,9 @@ public class NhanVienVanPhongThongKe {
         this.thang = thang;
         this.soBuoiDiLam = soBuoiDiLam;
         this.soGioDiMuonVeSom = soGioDiMuonVeSom;
+    }
+    public NhanVienVanPhongThongKe(String maNhanVien){
+        this.maNhanVien = maNhanVien;
     }
 
     public String getMaNhanVien() {
