@@ -10,6 +10,7 @@ import com.btl_tkxdpm.ImportExcel;
 import com.btl_tkxdpm.edit.EditController;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import com.btl_tkxdpm.export.ExportController;
+import com.btl_tkxdpm.statistic.StatisticController;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -172,6 +173,20 @@ public class HomeController implements Initializable {
         tableView.setItems(attendanceDB.queryByTenOrID(attendanceDB.getListAttendance(),query));
     }
     @FXML
+    void clickThongKe(MouseEvent event){
+        try {
+            FXMLLoader loader = new FXMLLoader(SwitchScreener.class.getResource("/com/btl_tkxdpm/thongKe.fxml"));
+            Parent root = loader.load();
+            StatisticController controller = loader.getController();
+            controller.setAttendanceDB(attendanceDB);
+            Scene scene = new Scene(root);
+            SwitchScreener.primaryStage.setScene(scene);
+            SwitchScreener.primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
     void clickXuatBaoCao(MouseEvent event) {
         Platform.runLater(() -> {
             try {
@@ -205,8 +220,9 @@ public class HomeController implements Initializable {
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
             try {
                 String check = CheckExcel.checkErrorFile(selectedFile.getAbsolutePath(),hrDB,attendanceDB);
-                if (check.equals("Complete")){
+                if (check.equals("complete")){
                     ObservableList<NhanVienAttendance> addChamCong = ImportExcel.importExcel(selectedFile.getAbsolutePath(),hrDB);
+                    System.out.println("Import succesfully");
                     attendanceDB.addAttendance(addChamCong);
                     tableView.setItems(attendanceDB.getListAttendance());
                 }

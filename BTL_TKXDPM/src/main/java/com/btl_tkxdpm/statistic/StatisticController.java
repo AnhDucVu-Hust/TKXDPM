@@ -1,10 +1,12 @@
-package com.btl_tkxdpm.export;
+package com.btl_tkxdpm.statistic;
 import com.btl_tkxdpm.AttendanceDB.IAttendanceDB;
 import com.btl_tkxdpm.AttendanceDB.OnSiteAttendanceDB;
 import com.btl_tkxdpm.SwitchScreener;
 import com.btl_tkxdpm.entity.CongNhanThongKe;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import com.btl_tkxdpm.entity.NhanVienVanPhongThongKe;
+import com.btl_tkxdpm.export.BangChamCongCongNhan;
+import com.btl_tkxdpm.export.BangChamCongNVVP;
 import com.btl_tkxdpm.home.HomeController;
 import javafx.application.Platform;
 import javafx.beans.property.*;
@@ -29,7 +31,7 @@ import java.util.Set;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.Collectors;
 
-public class ExportController implements Initializable {
+public class StatisticController implements Initializable {
     private IAttendanceDB attendanceDB;
 
     public IAttendanceDB getAttendanceDB() {
@@ -91,56 +93,7 @@ public class ExportController implements Initializable {
         }
     }
 
-    @FXML
-    void clickXacNhan(MouseEvent event) {
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Định dạng báo cáo");
-        alert.setHeaderText("Bạn mốn xuất báo cáo dưới định dạng nào:");
-
-        // Create two buttons
-        ButtonType buttonTypeExcel = new ButtonType("Excel");
-        ButtonType buttonTypeCSV = new ButtonType("CSV");
-
-        // Set buttons in the alert
-        alert.getButtonTypes().setAll(buttonTypeExcel, buttonTypeCSV);
-
-        // Show the alert and wait for the user's response
-        alert.showAndWait().ifPresent(response -> {
-            if (response == buttonTypeCSV) {
-                System.out.println("User clicked CSV");
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Save CSV File");
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-                File file = fileChooser.showSaveDialog(SwitchScreener.primaryStage);
-                //String donVi = donViSearch.getValue().toString();
-                if (file != null) {
-                    if (donViSearch.getValue().equals("Công nhân")) {
-                        CsvExporter.exportToCSV(tableCongNhan, file.getAbsolutePath());
-                    }
-                    else{
-                        CsvExporter.exportToCSV(tableNhanVien, file.getAbsolutePath());
-                    }
-                }
-                // Add your code for handling "Yes" option
-            } else if (response == buttonTypeExcel) {
-                System.out.println("User clicked Excel");
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Save Excel File");
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
-                File file = fileChooser.showSaveDialog(SwitchScreener.primaryStage);
-                //String donVi = donViSearch.getValue().toString();
-                if (file != null) {
-                    if (donViSearch.getValue().equals("Công nhân")) {
-                        ExcelExporter.exportToExcel(tableCongNhan, file.getAbsolutePath());
-                    }
-                    else{
-                        ExcelExporter.exportToExcel(tableNhanVien, file.getAbsolutePath());
-                    }
-                }
-            }
-        });
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

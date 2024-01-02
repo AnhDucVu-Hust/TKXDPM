@@ -23,4 +23,7 @@ module com.example.btl_tkxdpm {
 
     opens com.btl_tkxdpm.edit to javafx.fxml;
     exports com.btl_tkxdpm.edit;
+
+    opens  com.btl_tkxdpm.statistic to javafx.fxml;
+    exports  com.btl_tkxdpm.statistic;
 }
