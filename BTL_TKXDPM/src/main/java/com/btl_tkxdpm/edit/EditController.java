@@ -12,11 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -46,16 +42,26 @@ public class EditController implements Initializable {
     private NhanVienAttendance logChamCong;
     @FXML
     private Label chucDanh;
-
+    void editAttendance(NhanVienAttendance log, LocalDate ngay, LocalTime gio,String loaiChamCong){
+        log.setDay(ngay);
+        log.setGioVao(gio);
+        log.setLoaiChamCong(loaiChamCong);
+        attendanceDB.editAttendance(log);
+    }
     @FXML
     void clickXacNhan(MouseEvent event){
-        LocalDate ngayXacNhan = ngay.getValue();
+        try {LocalDate ngayXacNhan = ngay.getValue();
         LocalTime gioXacNhan = LocalTime.parse(gio.getText().toString());
         String loaiChamCongXacNhan = loaiChamCong.getValue();
-        logChamCong.setLoaiChamCong(loaiChamCongXacNhan);
-        logChamCong.setGioVao(gioXacNhan);
-        logChamCong.setDay(ngayXacNhan);
-        attendanceDB.editAttendance(logChamCong);
+        editAttendance(logChamCong,ngayXacNhan,gioXacNhan,loaiChamCongXacNhan);}
+        catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Sai cú pháp");
+            alert.setHeaderText("WARNING");
+            alert.setContentText("Sai cú pháp thông tin ngày và giờ chấm công");
+            // Show the alert
+            alert.showAndWait();
+        }
         try {
             FXMLLoader loader = new FXMLLoader(SwitchScreener.class.getResource("/com/btl_tkxdpm/manHinhChinh.fxml"));
             Parent root = loader.load();

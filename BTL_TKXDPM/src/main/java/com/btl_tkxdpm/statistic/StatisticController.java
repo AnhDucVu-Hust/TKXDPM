@@ -150,11 +150,7 @@ public class StatisticController implements Initializable {
             loaiNhanSu.setValue("Công nhân");
         });
     }
-
-    @FXML
-    void clickSearch(MouseEvent event) {
-        String thang = thangSearch.getValue();
-        String donVi = donViSearch.getValue();
+    void Search(String thang, String donVi){
         if (loaiNhanSu.getValue().equals("Công nhân")) {
             if (thang.equals("Tất cả") && donVi.equals("Tất cả")) {
                 System.out.println("Do nothing");
@@ -179,5 +175,12 @@ public class StatisticController implements Initializable {
                 tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)).filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang)))));
             }
         }
+    }
+    @FXML
+    void clickSearch(MouseEvent event) {
+        String thang = thangSearch.getValue();
+        String donVi = donViSearch.getValue();
+        Search(thang,donVi);
+
     }
 }
