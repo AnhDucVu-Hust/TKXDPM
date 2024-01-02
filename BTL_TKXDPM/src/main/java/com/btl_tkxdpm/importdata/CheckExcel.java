@@ -1,4 +1,4 @@
-package com.btl_tkxdpm;
+package com.btl_tkxdpm.importdata;
 
 import com.btl_tkxdpm.AttendanceDB.IAttendanceDB;
 import com.btl_tkxdpm.HumanResourceDB.IHRSubSystem;

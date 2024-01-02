@@ -26,4 +26,6 @@ module com.example.btl_tkxdpm {
 
     opens  com.btl_tkxdpm.statistic to javafx.fxml;
     exports  com.btl_tkxdpm.statistic;
+    exports com.btl_tkxdpm.importdata;
+    opens com.btl_tkxdpm.importdata to javafx.fxml;
 }
