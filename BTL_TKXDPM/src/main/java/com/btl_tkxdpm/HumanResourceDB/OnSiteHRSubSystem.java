@@ -44,4 +44,12 @@ public class OnSiteHRSubSystem implements IHRSubSystem{
             e.printStackTrace();
         }
     }
+    public NhanVien getNhanVienById(String maNhanVien){
+        for (NhanVien nv : listNhanVien){
+            if (nv.getMaNhanVien().equals(maNhanVien)){
+                return  nv;
+            }
+        }
+        return null;
+    }
 }

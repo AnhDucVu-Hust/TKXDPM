@@ -1,4 +1,4 @@
-package com.btl_tkxdpm.add;
+package com.btl_tkxdpm;
 
 import com.btl_tkxdpm.HumanResourceDB.IHRSubSystem;
 import com.btl_tkxdpm.Services;
@@ -39,7 +39,7 @@ public class ImportExcel {
                 String maNhanVien = row.getCell(0).getStringCellValue();
                 Date day = row.getCell(1).getDateCellValue();
                 LocalTime gio = LocalTime.parse(row.getCell(2).getStringCellValue(),timeFormatter);
-                int id = Integer.parseInt(row.getCell(4).getStringCellValue());
+                int id = (int)(row.getCell(4).getNumericCellValue());
                 NhanVien nhanvien = null;
                 for (NhanVien nv: listNhanVien){
                     if (nv.getMaNhanVien().equals(maNhanVien)){

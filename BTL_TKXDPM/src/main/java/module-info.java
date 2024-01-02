@@ -18,8 +18,8 @@ module com.example.btl_tkxdpm {
     opens com.btl_tkxdpm.export to javafx.fxml;
     exports com.btl_tkxdpm.export;
 
-    opens com.btl_tkxdpm.add to javafx.fxml;
-    exports  com.btl_tkxdpm.add;
+    opens com.btl_tkxdpm.employee to javafx.fxml;
+    exports  com.btl_tkxdpm.employee;
 
     opens com.btl_tkxdpm.edit to javafx.fxml;
     exports com.btl_tkxdpm.edit;

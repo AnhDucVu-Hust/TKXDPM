@@ -2,10 +2,11 @@ package com.btl_tkxdpm.home;
 
 import com.btl_tkxdpm.AttendanceDB.IAttendanceDB;
 import com.btl_tkxdpm.AttendanceDB.OnSiteAttendanceDB;
+import com.btl_tkxdpm.CheckExcel;
 import com.btl_tkxdpm.HumanResourceDB.IHRSubSystem;
 import com.btl_tkxdpm.HumanResourceDB.OnSiteHRSubSystem;
 import com.btl_tkxdpm.SwitchScreener;
-import com.btl_tkxdpm.add.ImportExcel;
+import com.btl_tkxdpm.ImportExcel;
 import com.btl_tkxdpm.edit.EditController;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import com.btl_tkxdpm.export.ExportController;
@@ -54,6 +55,8 @@ public class HomeController implements Initializable {
     private ChoiceBox<String> namSearch;
     @FXML
     private TextField search;
+    @FXML
+    private TableColumn<NhanVienAttendance,String> tableID;
 
     @FXML
     private TableColumn<NhanVienAttendance, String> tableChucDanh;
@@ -149,7 +152,7 @@ public class HomeController implements Initializable {
                 String donVi = donViSearch.getValue();
                 querybyThangvaDonVi(thang, donVi);
             });
-
+            tableID.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getId())));
             tableTen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getHoTen()));
             tableChucDanh.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getChucDanh()));
             tableMaNV.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNhanVien().getMaNhanVien()));
@@ -200,8 +203,18 @@ public class HomeController implements Initializable {
         if (selectedFile != null) {
             // Handle the selected file
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-            ObservableList<NhanVienAttendance> listFromExcel = ImportExcel.importExcel(selectedFile.getAbsolutePath(),hrDB);
-            attendanceDB.addAttendance(listFromExcel);
+            try {
+                String check = CheckExcel.checkErrorFile(selectedFile.getAbsolutePath(),hrDB,attendanceDB);
+                if (check.equals("Complete")){
+                    ObservableList<NhanVienAttendance> addChamCong = ImportExcel.importExcel(selectedFile.getAbsolutePath(),hrDB);
+                    attendanceDB.addAttendance(addChamCong);
+                    tableView.setItems(attendanceDB.getListAttendance());
+                }
+
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
         } else {
             System.out.println("File selection canceled.");
         }

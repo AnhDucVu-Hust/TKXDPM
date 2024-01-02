@@ -1,4 +1,4 @@
-package com.btl_tkxdpm.add;
+package com.btl_tkxdpm.employee;
 
 import com.btl_tkxdpm.HumanResourceDB.IHRSubSystem;
 import com.btl_tkxdpm.HumanResourceDB.OnSiteHRSubSystem;
@@ -19,7 +19,7 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AddController implements Initializable {
+public class EmployeeController implements Initializable {
     private IHRSubSystem hrSubSystem;
     @FXML
     private Button donViSearch;

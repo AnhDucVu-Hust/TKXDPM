@@ -5,6 +5,6 @@ import javafx.collections.ObservableList;
 
 public interface IHRSubSystem {
     ObservableList<NhanVien> getListNhanVien();
-
+    public NhanVien getNhanVienById(String maNhanVien);
 
 }
