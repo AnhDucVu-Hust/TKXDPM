@@ -63,7 +63,7 @@ public class StatisticController implements Initializable {
     private TableColumn<NhanVienVanPhongThongKe, String> tableNgay;
 
     @FXML
-    private TableView <NhanVienVanPhongThongKe>tableNhanVien;
+    private TableView <NhanVienVanPhongThongKe>tableNhanVienVanPhong;
     @FXML
     private TableView<CongNhanThongKe> tableCongNhan;
     @FXML
@@ -101,7 +101,7 @@ public class StatisticController implements Initializable {
         Platform.runLater(() ->
         {
             ObservableList<CongNhanThongKe> listCongNhan = BangChamCongCongNhan.getBangThongKe(attendanceDB.getListCongNhanAttendance());
-            ObservableList<NhanVienVanPhongThongKe> listNVVP = BangChamCongNVVP.getBangChamCong(attendanceDB.getListNhanVienAttendace());
+            ObservableList<NhanVienVanPhongThongKe> listNVVP = BangChamCongNVVP.getBangThongKe(attendanceDB.getListNhanVienAttendace());
             Set<String> uniqueDonVi = attendanceDB.getListAttendance().stream()
                     .map(c -> c.getNhanVien().getDonVi())
                     .collect(Collectors.toSet());
@@ -112,13 +112,13 @@ public class StatisticController implements Initializable {
                 String selectedOption = loaiNhanSu.getValue();
                 if (selectedOption.equals("Công nhân")) {
                     tableCongNhan.setVisible(true);
-                    tableNhanVien.setVisible(false);
+                    tableNhanVienVanPhong.setVisible(false);
                 }
             });
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             tableCongNhan.setItems(listCongNhan);
-            tableNhanVien.setItems(listNVVP);
+            tableNhanVienVanPhong.setItems(listNVVP);
             //Table công nhân
             tableTenCN.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getHoTen()));
             tableMaNVCN.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMaNhanVien()));
@@ -133,10 +133,10 @@ public class StatisticController implements Initializable {
                 String loai = loaiNhanSu.getValue();
                 if (loai.equals("Công nhân")) {
                     tableCongNhan.setVisible(true);
-                    tableNhanVien.setVisible(false);
+                    tableNhanVienVanPhong.setVisible(false);
                 } else {
                     tableCongNhan.setVisible(false);
-                    tableNhanVien.setVisible(true);
+                    tableNhanVienVanPhong.setVisible(true);
                 }
             });
             thangSearch.setItems(FXCollections.observableArrayList(
@@ -168,11 +168,11 @@ public class StatisticController implements Initializable {
                 System.out.println("Do nothing");
             } else if (donVi.equals("Tất cả")) {
                 Month month = Month.of(Integer.parseInt(thang));
-                tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getDay().getMonth() == month)));
+                tableNhanVienVanPhong.setItems(BangChamCongNVVP.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getDay().getMonth() == month)));
             } else if (thang.equals("Tất cả")) {
-                tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi))));
+                tableNhanVienVanPhong.setItems(BangChamCongNVVP.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi))));
             } else {
-                tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)).filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang)))));
+                tableNhanVienVanPhong.setItems(BangChamCongNVVP.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)).filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang)))));
             }
         }
     }

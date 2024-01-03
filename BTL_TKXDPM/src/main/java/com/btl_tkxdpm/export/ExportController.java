@@ -61,7 +61,7 @@ public class ExportController implements Initializable {
     private TableColumn<NhanVienVanPhongThongKe, String> tableNgay;
 
     @FXML
-    private TableView <NhanVienVanPhongThongKe>tableNhanVien;
+    private TableView <NhanVienVanPhongThongKe>tableNhanVienVanPhong;
     @FXML
     private TableView<CongNhanThongKe> tableCongNhan;
     @FXML
@@ -113,13 +113,35 @@ public class ExportController implements Initializable {
                 fileChooser.setTitle("Save CSV File");
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
                 File file = fileChooser.showSaveDialog(SwitchScreener.primaryStage);
+                System.out.println(loaiNhanSu.getValue());
                 //String donVi = donViSearch.getValue().toString();
                 if (file != null) {
-                    if (donViSearch.getValue().equals("Công nhân")) {
-                        CsvExporter.exportToCSV(tableCongNhan, file.getAbsolutePath());
+                    if (loaiNhanSu.getValue().equals("Công nhân")) {
+                        if (tableCongNhan.getItems().size()==0){
+                            Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                            alert1.setTitle("Lỗi xuất báo cáo");
+                            alert1.setHeaderText("WARNING");
+                            alert1.setContentText("Không có bản ghi nào");
+                            // Show the alert
+                            alert1.showAndWait();
+                        }
+                        else {
+                            CsvExporter.exportToCSV(tableCongNhan, file.getAbsolutePath());
+                        }
+
                     }
                     else{
-                        CsvExporter.exportToCSV(tableNhanVien, file.getAbsolutePath());
+                        if (tableNhanVienVanPhong.getItems().size()==0){
+                            Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                            alert1.setTitle("Lỗi xuất báo cáo");
+                            alert1.setHeaderText("WARNING");
+                            alert1.setContentText("Không có bản ghi nào");
+                            // Show the alert
+                            alert1.showAndWait();
+                        }
+                        else {
+                        CsvExporter.exportToCSV(tableNhanVienVanPhong, file.getAbsolutePath());
+                        }
                     }
                 }
                 // Add your code for handling "Yes" option
@@ -131,14 +153,36 @@ public class ExportController implements Initializable {
                 File file = fileChooser.showSaveDialog(SwitchScreener.primaryStage);
                 //String donVi = donViSearch.getValue().toString();
                 if (file != null) {
-                    if (donViSearch.getValue().equals("Công nhân")) {
-                        ExcelExporter.exportToExcel(tableCongNhan, file.getAbsolutePath());
+                    if (loaiNhanSu.getValue().equals("Công nhân")) {
+                        if (tableCongNhan.getItems().size()==0){
+                            Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                            alert1.setTitle("Lỗi xuất báo cáo");
+                            alert1.setHeaderText("WARNING");
+                            alert1.setContentText("Không có bản ghi nào");
+                            // Show the alert
+                            alert1.showAndWait();
+                        }
+                        else {
+                            ExcelExporter.exportToExcel(tableCongNhan, file.getAbsolutePath());
+                        }
+
                     }
                     else{
-                        ExcelExporter.exportToExcel(tableNhanVien, file.getAbsolutePath());
+                        if (tableNhanVienVanPhong.getItems().size()==0){
+                            Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                            alert1.setTitle("Lỗi xuất báo cáo");
+                            alert1.setHeaderText("WARNING");
+                            alert1.setContentText("Không có bản ghi nào");
+                            // Show the alert
+                            alert1.showAndWait();
+                        }
+                        else {
+                            ExcelExporter.exportToExcel(tableNhanVienVanPhong, file.getAbsolutePath());
+                        }
                     }
                 }
             }
+
         });
     }
 
@@ -148,7 +192,7 @@ public class ExportController implements Initializable {
         Platform.runLater(() ->
         {
             ObservableList<CongNhanThongKe> listCongNhan = BangChamCongCongNhan.getBangThongKe(attendanceDB.getListCongNhanAttendance());
-            ObservableList<NhanVienVanPhongThongKe> listNVVP = BangChamCongNVVP.getBangChamCong(attendanceDB.getListNhanVienAttendace());
+            ObservableList<NhanVienVanPhongThongKe> listNVVP = BangChamCongNVVP.getBangThongKe(attendanceDB.getListNhanVienAttendace());
             Set<String> uniqueDonVi = attendanceDB.getListAttendance().stream()
                     .map(c -> c.getNhanVien().getDonVi())
                     .collect(Collectors.toSet());
@@ -159,13 +203,17 @@ public class ExportController implements Initializable {
                 String selectedOption = loaiNhanSu.getValue();
                 if (selectedOption.equals("Công nhân")) {
                     tableCongNhan.setVisible(true);
-                    tableNhanVien.setVisible(false);
+                    tableNhanVienVanPhong.setVisible(false);
+                }
+                else {
+                    tableNhanVienVanPhong.setVisible(true);
+                    tableCongNhan.setVisible(false);
                 }
             });
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             tableCongNhan.setItems(listCongNhan);
-            tableNhanVien.setItems(listNVVP);
+            tableNhanVienVanPhong.setItems(listNVVP);
             //Table công nhân
             tableTenCN.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getHoTen()));
             tableMaNVCN.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMaNhanVien()));
@@ -180,10 +228,10 @@ public class ExportController implements Initializable {
                 String loai = loaiNhanSu.getValue();
                 if (loai.equals("Công nhân")) {
                     tableCongNhan.setVisible(true);
-                    tableNhanVien.setVisible(false);
+                    tableNhanVienVanPhong.setVisible(false);
                 } else {
                     tableCongNhan.setVisible(false);
-                    tableNhanVien.setVisible(true);
+                    tableNhanVienVanPhong.setVisible(true);
                 }
             });
             thangSearch.setItems(FXCollections.observableArrayList(
@@ -205,6 +253,7 @@ public class ExportController implements Initializable {
         if (loaiNhanSu.getValue().equals("Công nhân")) {
             if (thang.equals("Tất cả") && donVi.equals("Tất cả")) {
                 System.out.println("Do nothing");
+                tableCongNhan.setItems(BangChamCongCongNhan.getBangThongKe(attendanceDB.getListAttendance()));
             } else if (donVi.equals("Tất cả")) {
                 Month month = Month.of(Integer.parseInt(thang));
                 tableCongNhan.setItems(BangChamCongCongNhan.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getDay().getMonth() == month)));
@@ -217,13 +266,14 @@ public class ExportController implements Initializable {
         else {
             if (thang.equals("Tất cả") && donVi.equals("Tất cả")) {
                 System.out.println("Do nothing");
+                tableNhanVienVanPhong.setItems(BangChamCongNVVP.getBangThongKe(attendanceDB.getListAttendance()));
             } else if (donVi.equals("Tất cả")) {
                 Month month = Month.of(Integer.parseInt(thang));
-                tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getDay().getMonth() == month)));
+                tableNhanVienVanPhong.setItems(BangChamCongNVVP.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getDay().getMonth() == month)));
             } else if (thang.equals("Tất cả")) {
-                tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi))));
+                tableNhanVienVanPhong.setItems(BangChamCongNVVP.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi))));
             } else {
-                tableNhanVien.setItems(BangChamCongNVVP.getBangChamCong(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)).filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang)))));
+                tableNhanVienVanPhong.setItems(BangChamCongNVVP.getBangThongKe(attendanceDB.getListAttendance().filtered(c -> c.getNhanVien().getDonVi().equals(donVi)).filtered(c -> c.getDay().getMonth() == Month.of(Integer.parseInt(thang)))));
             }
         }
     }

@@ -2,6 +2,7 @@ package com.btl_tkxdpm.export;
 
 import com.btl_tkxdpm.entity.NhanVienAttendance;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -37,6 +38,12 @@ public class CsvExporter {
             }
 
             System.out.println("Exported successfully to: " + filePath);
+            Alert alert1 = new Alert(Alert.AlertType.WARNING);
+            alert1.setTitle("Xuất báo cáo ");
+            alert1.setHeaderText("Thành công");
+            alert1.setContentText("Đã xuất báo cáo thành công ");
+            // Show the alert
+            alert1.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }

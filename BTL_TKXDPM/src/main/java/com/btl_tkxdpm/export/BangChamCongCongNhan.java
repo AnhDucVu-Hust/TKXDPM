@@ -29,15 +29,18 @@ public class BangChamCongCongNhan {
             thongKe.setHoTen(attendance.getNhanVien().getHoTen());
             if (attendance.getLoaiChamCong().equals("CHECKOUT")){
                 LocalTime checkin_time = attendance.getGioVao();
-                ObservableList<NhanVienAttendance> checkin_day = attendanceDB.filtered(c -> c.getDay()==attendance.getDay()).filtered(c -> c.getLoaiChamCong().equals("CHECKIN"));
+                ObservableList<NhanVienAttendance> checkin_day = attendanceDB.filtered(c -> (c.getDay().toString().equals(attendance.getDay().toString()) && c.getNhanVien().getMaNhanVien().equals(attendance.getNhanVien().getMaNhanVien()))).filtered(c -> c.getLoaiChamCong().equals("CHECKIN"));
                 if (checkin_day != null && checkin_day.size()>0){
+                    System.out.println("CHECK");
                     checkin_time = checkin_day.get(0).getGioVao();
                 }
                 if (attendance.getGioVao().isAfter(LocalTime.of(17, 30))){
                     thongKe.setThoiGianTangCa(thongKe.getThoiGianTangCa()-Services.SubtractLocalTime(attendance.getGioVao(),LocalTime.of(17,30)));
                 }
-                thongKe.setThoiGianLam(thongKe.getThoiGianLam()+Services.SubtractLocalTime(attendance.getGioVao(),checkin_time));
-            }
+                if (attendance.getGioVao().isAfter(checkin_time)) {
+                    thongKe.setThoiGianLam(thongKe.getThoiGianLam() + Services.SubtractLocalTime(checkin_time,attendance.getGioVao()));
+                }
+                }
         }
         return FXCollections.observableArrayList(thongKeMap.values());
     }

@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class BangChamCongNVVP {
-    public static ObservableList<NhanVienVanPhongThongKe> getBangChamCong(ObservableList<NhanVienAttendance> attendanceDB) {
+    public static ObservableList<NhanVienVanPhongThongKe> getBangThongKe(ObservableList<NhanVienAttendance> attendanceDB) {
         Map<String, NhanVienVanPhongThongKe> thongKeMap = new HashMap<>();
         for (NhanVienAttendance attendance : attendanceDB) {
             String maNV = attendance.getNhanVien().getMaNhanVien();

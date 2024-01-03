@@ -108,7 +108,7 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Button>
-            <TableView fx:id="tableNhanVien" layoutY="221.0" prefHeight="319.0" prefWidth="650.0" visible="false">
+            <TableView fx:id="tableNhanVienVanPhong" layoutY="221.0" prefHeight="319.0" prefWidth="650.0" visible="false">
                <columns>
                   <TableColumn fx:id="tableTen" prefWidth="114.94215285778046" text="Tên" />
                   <TableColumn fx:id="tableMaNV" minWidth="5.0" prefWidth="146.99260711669922" text="Mã Nhân Viên" />
