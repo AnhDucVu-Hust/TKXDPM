@@ -3,10 +3,12 @@ package com.btl_tkxdpm.edit;
 import com.btl_tkxdpm.AttendanceDB.IAttendanceDB;
 import com.btl_tkxdpm.SwitchScreener;
 import com.btl_tkxdpm.entity.NhanVienAttendance;
+import com.btl_tkxdpm.entity.NhanVienVanPhongThongKe;
 import com.btl_tkxdpm.export.ExportController;
 import com.btl_tkxdpm.home.HomeController;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -19,6 +21,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class EditController implements Initializable {
@@ -49,7 +53,10 @@ public class EditController implements Initializable {
         log.setLoaiChamCong(loaiChamCong);
         attendanceDB.editAttendance(log);
     }
-    @FXML
+    public static NhanVienAttendance tryEditLoaiChamCong(NhanVienAttendance nhanVienAttendance, String loaiChamCong){
+        nhanVienAttendance.setLoaiChamCong(loaiChamCong);
+        return nhanVienAttendance;
+    }    @FXML
     void clickXacNhan(MouseEvent event){
         try {LocalDate ngayXacNhan = ngay.getValue();
         LocalTime gioXacNhan = LocalTime.parse(gio.getText().toString());

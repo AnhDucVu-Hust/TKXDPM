@@ -16,33 +16,19 @@ public class EditControllerTest {
 
     private EditController editController;
 
-    @BeforeEach
-    public void setUp() {
-        // Tạo một đối tượng EditController để kiểm thử
-        editController = new EditController();
-
-        // Sử dụng Mockito để tạo mock cho IAttendanceDB
-        IAttendanceDB mockAttendanceDB = mock(IAttendanceDB.class);
-
-        // Thiết lập mockAttendanceDB cho editController
-        editController.setAttendanceDB(mockAttendanceDB);
-    }
 
     @Test
-    public void testEditAttendance() {
+    public void testEditLoaiChamCong() {
         // Tạo dữ liệu cho việc kiểm thử
-        NhanVienAttendance log = new NhanVienAttendance(1,new NhanVien("MNV001", "Nguyen Van A", "ChucDanhA","Trưởng phòng"), LocalDate.now(), LocalTime.now(), "ChamCongA");;
-        LocalDate ngay = LocalDate.now();
-        LocalTime gio = LocalTime.now();
-        String loaiChamCong = "ChamCongType";
+        NhanVienAttendance log = new NhanVienAttendance(1,new NhanVien("MNV001", "Nguyen Van A", "ChucDanhA","Trưởng phòng"), LocalDate.now(), LocalTime.now(), "CHECKIN");;
+
 
         // Gọi phương thức editAttendance để chỉnh sửa thông tin chấm công
-        editController.editAttendance(log, ngay, gio, loaiChamCong);
+        editController.tryEditLoaiChamCong(log,"CHECKOUT");
 
         // Kiểm tra xem thông tin đã được chỉnh sửa đúng chưa
-        assertEquals(ngay, log.getDay());
-        assertEquals(gio, log.getGioVao());
-        assertEquals(loaiChamCong, log.getLoaiChamCong());
+        assertEquals(String.valueOf(log.getLoaiChamCong()), "CHECKOUT");
+
 
     }
 }

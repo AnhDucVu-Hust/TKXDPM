@@ -72,7 +72,6 @@ public class StatisticControllerTest {
        List<String> name=StatisticController.trySearchName(data,"5");
        for (int i=0;i<name.size();i++){
            assertEquals(name.get(i),data.get(i).getHoTen());
-
        }
     }
 }
